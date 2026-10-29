@@ -14,7 +14,7 @@ export function SiteHeader() {
 
       <SidebarTrigger
         aria-label="Mở hoặc thu gọn thanh điều hướng"
-        className="text-[#005aab]"
+        className="text-primary"
       />
     </header>
   )

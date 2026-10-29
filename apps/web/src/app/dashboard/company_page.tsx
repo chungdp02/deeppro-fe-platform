@@ -56,10 +56,10 @@ export default function Page() {
           className="top-16 h-[calc(100svh-4rem)]"
         />
 
-        <SidebarInset className="min-w-0 bg-[#edeff4]">
+        <SidebarInset className="min-w-0 bg-muted">
           <main className="mx-auto w-full max-w-7xl space-y-6 p-4 md:p-8">
             <div>
-              <h1 className="text-2xl font-semibold text-[#0c263d]">
+              <h1 className="text-2xl font-semibold text-foreground">
                 Thông tin doanh nghiệp
               </h1>
               <p className="text-muted-foreground mt-2 text-sm">

@@ -23,7 +23,7 @@ export function App() {
       <SiteHeader />
       <div className="flex min-h-0 flex-1">
         <AppSidebar variant="sidebar" className="top-16 h-[calc(100svh-4rem)]" />
-        <SidebarInset className="min-w-0 bg-[#edeff4]">
+        <SidebarInset className="min-w-0 bg-muted">
           <main className="p-4 md:p-8">
             <h1 className="text-2xl font-semibold">{pendingPages[page] ?? "Không tìm thấy trang"}</h1>
             <p className="text-muted-foreground mt-2">

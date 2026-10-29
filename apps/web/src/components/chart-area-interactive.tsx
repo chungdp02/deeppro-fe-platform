@@ -129,11 +129,11 @@ const chartData = [
 const chartConfig = {
   desktop: {
     label: "Máy tính",
-    color: "#005aab",
+    color: "var(--chart-1)",
   },
   mobile: {
     label: "Điện thoại",
-    color: "#add8ff",
+    color: "var(--chart-2)",
   },
 } satisfies ChartConfig
 

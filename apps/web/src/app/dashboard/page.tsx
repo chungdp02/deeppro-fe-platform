@@ -32,11 +32,11 @@ export default function Page() {
           className="top-16 h-[calc(100svh-4rem)]"
         />
 
-        <SidebarInset className="min-w-0 bg-[#edeff4]">
+        <SidebarInset className="min-w-0 bg-muted">
           <main className="@container/main flex flex-1 flex-col gap-6 py-6">
             {/* Tiêu đề */}
             <div className="px-4 lg:px-6">
-              <h1 className="text-2xl font-semibold text-[#0c263d]">
+              <h1 className="text-2xl font-semibold text-foreground">
                 Tổng quan
               </h1>
               <p className="text-muted-foreground mt-1 text-sm">
