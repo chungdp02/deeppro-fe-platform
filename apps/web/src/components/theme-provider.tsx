@@ -30,6 +30,20 @@ function isTheme(value: string | null): value is Theme {
   return THEME_VALUES.includes(value as Theme)
 }
 
+function readStoredTheme(storageKey: string): Theme | null {
+  if (typeof window === "undefined") {
+    return null
+  }
+
+  try {
+    const storedTheme = window.localStorage.getItem(storageKey)
+    return isTheme(storedTheme) ? storedTheme : null
+  } catch {
+    // The current page can still follow the system preference if storage is unavailable.
+    return null
+  }
+}
+
 function getSystemTheme(): ResolvedTheme {
   if (window.matchMedia(COLOR_SCHEME_QUERY).matches) {
     return "dark"
@@ -84,18 +98,17 @@ export function ThemeProvider({
   ...props
 }: ThemeProviderProps) {
   const [theme, setThemeState] = React.useState<Theme>(() => {
-    const storedTheme = localStorage.getItem(storageKey)
-    if (isTheme(storedTheme)) {
-      return storedTheme
-    }
-
-    return defaultTheme
+    return readStoredTheme(storageKey) ?? defaultTheme
   })
 
   const setTheme = React.useCallback(
     (nextTheme: Theme) => {
-      localStorage.setItem(storageKey, nextTheme)
       setThemeState(nextTheme)
+      try {
+        window.localStorage.setItem(storageKey, nextTheme)
+      } catch {
+        // Keep the theme change active for this session when storage is unavailable.
+      }
     },
     [storageKey]
   )
@@ -105,6 +118,10 @@ export function ThemeProvider({
       const root = document.documentElement
       const resolvedTheme =
         nextTheme === "system" ? getSystemTheme() : nextTheme
+      // The head script has already applied the initial theme before paint.
+      // Avoid invalidating every element's transitions again during hydration.
+      if (root.classList.contains(resolvedTheme) &&
+        !root.classList.contains(resolvedTheme === "dark" ? "light" : "dark")) return
       const restoreTransitions = disableTransitionOnChange
         ? disableTransitionsTemporarily()
         : null

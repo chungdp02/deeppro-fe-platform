@@ -1,14 +1,19 @@
 import { StrictMode } from "react"
-import { createRoot } from "react-dom/client"
+import { createRoot, hydrateRoot } from "react-dom/client"
 
-import "@workspace/ui/globals.css"
+import "@/styles/landing.css"
+import "@/styles/trace-experience.css"
 import { App } from "./App.tsx"
-import { ThemeProvider } from "@/components/theme-provider.tsx"
 
-createRoot(document.getElementById("root")!).render(
+const root = document.getElementById("root")!
+const app = (
   <StrictMode>
-    <ThemeProvider>
-      <App />
-    </ThemeProvider>
+    <App />
   </StrictMode>
 )
+
+if (root.dataset.prerendered === "true") {
+  hydrateRoot(root, app)
+} else {
+  createRoot(root).render(app)
+}

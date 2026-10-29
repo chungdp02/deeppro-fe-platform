@@ -1,10 +1,65 @@
 <!doctype html>
-<html lang="en">
+<html lang="vi" class="no-js">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="shortcut icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>vite-monorepo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="preload"
+      href="/fonts/deeppro/montserrat-vietnamese.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <script>
+      const root = document.documentElement
+      root.classList.remove("no-js")
+      if (!("IntersectionObserver" in window)) {
+        root.classList.add("no-intersection-observer")
+      }
+
+      let savedTheme = null
+      try {
+        savedTheme = localStorage.getItem("deeptrace-theme")
+      } catch {
+        savedTheme = null
+      }
+
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches
+      const initialTheme =
+        savedTheme === "light" || savedTheme === "dark"
+          ? savedTheme
+          : prefersDark
+            ? "dark"
+            : "light"
+      root.classList.remove("light", "dark")
+      root.classList.add(initialTheme)
+    </script>
+    <meta name="theme-color" content="#0c263d" />
+    <meta
+      name="description"
+      content="DeepTrace giúp doanh nghiệp ghi nhận và chia sẻ hành trình truy xuất nguồn gốc sản phẩm từ sản xuất đến người tiêu dùng."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:url" content="https://deeptrace.deepprotech.com/" />
+    <meta
+      property="og:title"
+      content="DeepTrace | Truy xuất nguồn gốc minh bạch"
+    />
+    <meta
+      property="og:description"
+      content="Kết nối thông tin sản phẩm và các mốc trong chuỗi cung ứng trên một hành trình dễ theo dõi."
+    />
+    <link rel="canonical" href="https://deeptrace.deepprotech.com/" />
+    <title>DeepTrace | Truy xuất nguồn gốc minh bạch</title>
   </head>
   <body>
     <div id="root"></div>

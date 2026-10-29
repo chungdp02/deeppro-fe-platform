@@ -12,8 +12,11 @@ dist
 dist-ssr
 *.local
 
-# env files (can opt-in for committing if needed)
-.env*
+# Local environment files; allow safe example templates.
+.env
+.env.*
+!.env.example
+!.env.*.example
 
 # turbo
 .turbo
@@ -31,3 +34,22 @@ dist-ssr
 
 # typescript
 *.tsbuildinfo
+
+#agent
+.agent
+
+# Local V4 research captures, browser recordings and QA artifacts.
+/tmp/v4-qa/
+
+# Generated caches and local visual/test artifacts. Keep files on disk.
+apps/poc-astro/.astro/
+apps/web/.taste-skill/inspect/
+**/__pycache__/
+*.py[cod]
+**/tmp/downloaded-assets/
+**/tmp/pdfs/
+**/tmp/qa-reports/
+**/coverage/
+**/playwright-report/
+**/test-results/
+.lighthouseci/
