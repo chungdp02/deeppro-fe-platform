@@ -1,19 +1,37 @@
-import { Button } from "@workspace/ui/components/button"
+import DashboardPage from "./app/dashboard/page"
+import CompanyPage from "./app/dashboard/company_page"
+import { useCurrentPage } from "./hooks/use-current-page"
+import { AppSidebar } from "./components/app-sidebar"
+import { SiteHeader } from "./components/site-header"
+import { SidebarInset, SidebarProvider } from "@workspace/ui/components/sidebar"
+
+const pendingPages: Record<string, string> = {
+  "#san-pham": "Sản phẩm",
+  "#nhan-vien": "Nhân viên",
+  "#huong-dan": "Hướng dẫn",
+  "#cai-dat": "Cài đặt",
+  "#tro-giup": "Trợ giúp",
+}
 
 export function App() {
+  const page = useCurrentPage()
+  if (page === "#tong-quan") return <DashboardPage />
+  if (page === "#cong-ty") return <CompanyPage />
+
   return (
-    <div className="flex min-h-svh p-6">
-      <div className="flex max-w-md min-w-0 flex-col gap-4 text-sm leading-loose">
-        <div>
-          <h1 className="font-medium">Project ready!</h1>
-          <p>You may now add components and start building.</p>
-          <p>We&apos;ve already added the button component for you.</p>
-          <Button className="mt-2">Button</Button>
-        </div>
-        <div className="text-muted-foreground font-mono text-xs">
-          (Press <kbd>d</kbd> to toggle dark mode)
-        </div>
+    <SidebarProvider className="flex-col">
+      <SiteHeader />
+      <div className="flex min-h-0 flex-1">
+        <AppSidebar variant="sidebar" className="top-16 h-[calc(100svh-4rem)]" />
+        <SidebarInset className="min-w-0 bg-[#edeff4]">
+          <main className="p-4 md:p-8">
+            <h1 className="text-2xl font-semibold">{pendingPages[page] ?? "Không tìm thấy trang"}</h1>
+            <p className="text-muted-foreground mt-2">
+              {pendingPages[page] ? "Chức năng này đang được phát triển." : "Vui lòng chọn một mục trong thanh điều hướng."}
+            </p>
+          </main>
+        </SidebarInset>
       </div>
-    </div>
+    </SidebarProvider>
   )
 }
