@@ -19,13 +19,13 @@ export function NavMain({ items }: { items: NavItem[] }) {
   const activeUrl = useCurrentPage()
 
   return (
-    
     <SidebarGroup>
       <SidebarGroupContent>
         <SidebarMenu>
           {items.map((item) => (
             <SidebarMenuItem key={item.url}>
               <SidebarMenuButton
+                className="h-10 text-[15px] [&_svg]:size-[18px]"
                 tooltip={item.title}
                 isActive={activeUrl === item.url}
                 render={<a href={item.url} />}

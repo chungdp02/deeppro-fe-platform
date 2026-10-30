@@ -19,15 +19,22 @@ export function App() {
   if (page === "#cong-ty") return <CompanyPage />
 
   return (
-    <SidebarProvider className="flex-col">
+    <SidebarProvider className="flex-col [--sidebar-width:13.5rem]!">
       <SiteHeader />
       <div className="flex min-h-0 flex-1">
-        <AppSidebar variant="sidebar" className="top-16 h-[calc(100svh-4rem)]" />
+        <AppSidebar
+          variant="sidebar"
+          className="top-16 h-[calc(100svh-4rem)]"
+        />
         <SidebarInset className="min-w-0 bg-muted">
           <main className="p-4 md:p-8">
-            <h1 className="text-2xl font-semibold">{pendingPages[page] ?? "Không tìm thấy trang"}</h1>
-            <p className="text-muted-foreground mt-2">
-              {pendingPages[page] ? "Chức năng này đang được phát triển." : "Vui lòng chọn một mục trong thanh điều hướng."}
+            <h1 className="text-2xl font-semibold">
+              {pendingPages[page] ?? "Không tìm thấy trang"}
+            </h1>
+            <p className="mt-2 text-muted-foreground">
+              {pendingPages[page]
+                ? "Chức năng này đang được phát triển."
+                : "Vui lòng chọn một mục trong thanh điều hướng."}
             </p>
           </main>
         </SidebarInset>

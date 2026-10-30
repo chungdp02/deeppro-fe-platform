@@ -1,9 +1,6 @@
 import { AppSidebar } from "@/components/app-sidebar"
 import { SiteHeader } from "@/components/site-header"
-import {
-  SidebarInset,
-  SidebarProvider,
-} from "@workspace/ui/components/sidebar"
+import { SidebarInset, SidebarProvider } from "@workspace/ui/components/sidebar"
 import {
   Card,
   CardContent,
@@ -47,7 +44,7 @@ const companySections = [
 
 export default function Page() {
   return (
-    <SidebarProvider className="flex-col">
+    <SidebarProvider className="flex-col [--sidebar-width:13.5rem]!">
       <SiteHeader />
 
       <div className="flex min-h-0 flex-1">
@@ -62,7 +59,7 @@ export default function Page() {
               <h1 className="text-2xl font-semibold text-foreground">
                 Thông tin doanh nghiệp
               </h1>
-              <p className="text-muted-foreground mt-2 text-sm">
+              <p className="mt-2 text-sm text-muted-foreground">
                 Quản lý thông tin và hồ sơ pháp lý của doanh nghiệp.
               </p>
             </div>
@@ -84,10 +81,10 @@ export default function Page() {
                           key={field.label}
                           className="flex flex-col gap-1 py-3 first:pt-0 sm:flex-row sm:justify-between sm:gap-6"
                         >
-                          <dt className="text-muted-foreground text-sm">
+                          <dt className="text-sm text-muted-foreground">
                             {field.label}
                           </dt>
-                          <dd className="break-words text-sm font-medium sm:max-w-[65%] sm:text-right">
+                          <dd className="text-sm font-medium break-words sm:max-w-[65%] sm:text-right">
                             {field.value}
                           </dd>
                         </div>

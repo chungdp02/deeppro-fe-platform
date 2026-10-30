@@ -54,8 +54,8 @@
 
 /* Neutral shadcn base with DeepPro brand blue (#005AAB) as primary. */
 :root {
-  --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
-    "Segoe UI Emoji";
+  --font-sans:
+    ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --radius: 0.625rem;
   --background: oklch(1 0 0);
@@ -73,21 +73,21 @@
   --accent: #e6f0fa;
   --accent-foreground: #005aab;
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
+  --border: #d8e0e8;
+  --input: #d8e0e8;
   --ring: #005aab;
   --chart-1: #005aab;
   --chart-2: #add8ff;
-  --chart-3: #38bdf8;
+  --chart-3: #8ea9c1;
   --chart-4: #0c263d;
   --chart-5: #8ea9c1;
-  --sidebar: oklch(1 0 0);
-  --sidebar-foreground: #0c263d;
+  --sidebar: #0c263d;
+  --sidebar-foreground: #edeff4;
   --sidebar-primary: #005aab;
   --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: #e6f0fa;
-  --sidebar-accent-foreground: #005aab;
-  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-accent: #005aab;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #8ea9c1;
   --sidebar-ring: #005aab;
 }
 

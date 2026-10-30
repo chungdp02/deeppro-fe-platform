@@ -3,7 +3,7 @@ import { SidebarTrigger } from "@workspace/ui/components/sidebar"
 
 export function SiteHeader() {
   return (
-    <header className="flex h-16 shrink-0 items-center justify-between border-b bg-white px-4 lg:px-6">
+    <header className="sticky top-0 z-30 flex h-16 shrink-0 items-center justify-between border-b bg-white px-4 lg:px-6">
       <a href="/" aria-label="Trang chủ DeepTrace">
         <img
           src={deepTraceLogo}

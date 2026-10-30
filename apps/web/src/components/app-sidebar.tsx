@@ -1,39 +1,35 @@
 import * as React from "react"
+import { useCurrentPage } from "@/hooks/use-current-page"
 
 import { NavMain } from "@/components/nav-main"
 import { NavSecondary } from "@/components/nav-secondary"
-import deepTraceLogo from "@/assets/DeepTrace.png"
 import { NavUser } from "@/components/nav-user"
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
 } from "@workspace/ui/components/sidebar"
 import {
-    LayoutDashboardIcon,
+  LayoutDashboardIcon,
   Building2Icon,
   PackageIcon,
   UsersIcon,
   BookOpenIcon,
   Settings2Icon,
   CircleHelpIcon,
-} from "lucide-react";
+} from "lucide-react"
 const data = {
   user: {
-    name: "ABC",
-    email: "ABC@example.com",
+    name: "Quản trị viên",
+    email: "abz.jsc@gmail.com",
     avatar: "",
   },
   navMain: [
     {
-  title: "Tổng quan",
-  url: "#tong-quan",
-  icon: <LayoutDashboardIcon />,
-},
+      title: "Tổng quan",
+      url: "#tong-quan",
+      icon: <LayoutDashboardIcon />,
+    },
     {
       title: "Công ty",
       url: "#cong-ty",
@@ -69,27 +65,17 @@ const data = {
   ],
 }
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const page = useCurrentPage()
   return (
     <Sidebar collapsible="offcanvas" {...props}>
-      <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              className="data-[slot=sidebar-menu-button]:p-1.5!"
-              render={<a href="#" />}
-            >
-              
-              <img  
-                src={deepTraceLogo}               
-               alt="DeepTrace" 
-               className="h-8 w-auto max-w-full object-contain" 
-               />
-            </SidebarMenuButton>
-          </SidebarMenuItem>                  
-
-        </SidebarMenu>
-      </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className="pt-3">
+        {page === "#cong-ty" && (
+          <div className="mx-3 border-b border-sidebar-border/30 px-1 pt-2 pb-4">
+            <p className="text-[15px] leading-6 font-semibold text-sidebar-foreground">
+              Công ty Cổ phần Thực phẩm ABZ
+            </p>
+          </div>
+        )}
         <NavMain items={data.navMain} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
