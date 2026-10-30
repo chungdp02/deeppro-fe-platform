@@ -1,44 +1,43 @@
+import {
+  GuidePage,
+  HelpPage,
+  SettingsPage,
+} from "./app/dashboard/support_pages"
 import DashboardPage from "./app/dashboard/page"
 import CompanyPage from "./app/dashboard/company_page"
+import ProductsPage from "./app/dashboard/products_page"
+import EmployeesPage from "./app/dashboard/employees_page"
 import { useCurrentPage } from "./hooks/use-current-page"
-import { AppSidebar } from "./components/app-sidebar"
-import { SiteHeader } from "./components/site-header"
-import { SidebarInset, SidebarProvider } from "@workspace/ui/components/sidebar"
-
-const pendingPages: Record<string, string> = {
-  "#san-pham": "Sản phẩm",
-  "#nhan-vien": "Nhân viên",
-  "#huong-dan": "Hướng dẫn",
-  "#cai-dat": "Cài đặt",
-  "#tro-giup": "Trợ giúp",
-}
+import { DashboardLayout } from "./components/dashboard-layout"
 
 export function App() {
   const page = useCurrentPage()
-  if (page === "#tong-quan") return <DashboardPage />
-  if (page === "#cong-ty") return <CompanyPage />
+  const content =
+    page === "#tong-quan" ? (
+      <DashboardPage />
+    ) : page === "#cong-ty" ? (
+      <CompanyPage />
+    ) : page === "#san-pham" ? (
+      <ProductsPage />
+    ) : page === "#nhan-vien" ? (
+      <EmployeesPage />
+    ) : page === "#huong-dan" ? (
+      <GuidePage />
+    ) : page === "#cai-dat" ? (
+      <SettingsPage />
+    ) : page === "#tro-giup" ? (
+      <HelpPage />
+    ) : (
+      <main className="p-8">
+        <h1 className="text-2xl font-semibold">Không tìm thấy trang</h1>
+        <a
+          href="#tong-quan"
+          className="mt-4 inline-block text-primary underline"
+        >
+          Về Tổng quan
+        </a>
+      </main>
+    )
 
-  return (
-    <SidebarProvider className="flex-col [--sidebar-width:13.5rem]!">
-      <SiteHeader />
-      <div className="flex min-h-0 flex-1">
-        <AppSidebar
-          variant="sidebar"
-          className="top-16 h-[calc(100svh-4rem)]"
-        />
-        <SidebarInset className="min-w-0 bg-muted">
-          <main className="p-4 md:p-8">
-            <h1 className="text-2xl font-semibold">
-              {pendingPages[page] ?? "Không tìm thấy trang"}
-            </h1>
-            <p className="mt-2 text-muted-foreground">
-              {pendingPages[page]
-                ? "Chức năng này đang được phát triển."
-                : "Vui lòng chọn một mục trong thanh điều hướng."}
-            </p>
-          </main>
-        </SidebarInset>
-      </div>
-    </SidebarProvider>
-  )
+  return <DashboardLayout>{content}</DashboardLayout>
 }

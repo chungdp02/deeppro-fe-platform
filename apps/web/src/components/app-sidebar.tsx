@@ -1,5 +1,5 @@
 import * as React from "react"
-import { useCurrentPage } from "@/hooks/use-current-page"
+import deepTraceLogo from "@/assets/DeepTrace.png"
 
 import { NavMain } from "@/components/nav-main"
 import { NavSecondary } from "@/components/nav-secondary"
@@ -8,6 +8,7 @@ import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
+  SidebarHeader,
 } from "@workspace/ui/components/sidebar"
 import {
   LayoutDashboardIcon,
@@ -65,17 +66,24 @@ const data = {
   ],
 }
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const page = useCurrentPage()
   return (
-    <Sidebar collapsible="offcanvas" {...props}>
-      <SidebarContent className="pt-3">
-        {page === "#cong-ty" && (
-          <div className="mx-3 border-b border-sidebar-border/30 px-1 pt-2 pb-4">
-            <p className="text-[15px] leading-6 font-semibold text-sidebar-foreground">
-              Công ty Cổ phần Thực phẩm ABZ
-            </p>
-          </div>
-        )}
+    <Sidebar collapsible="icon" {...props}>
+      <SidebarHeader className="gap-0 p-0">
+        <a
+          href="#tong-quan"
+          aria-label="DeepTrace - Tổng quan"
+          className="flex h-16 items-center border-b border-sidebar-border/20 px-4 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
+        >
+          <span className="relative block h-9 w-44 overflow-hidden group-data-[collapsible=icon]:w-9">
+            <img
+              src={deepTraceLogo}
+              alt="DeepTrace"
+              className="absolute -top-3.5 -left-2.5 h-16 w-auto max-w-none brightness-0 invert"
+            />
+          </span>
+        </a>
+      </SidebarHeader>
+      <SidebarContent>
         <NavMain items={data.navMain} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>

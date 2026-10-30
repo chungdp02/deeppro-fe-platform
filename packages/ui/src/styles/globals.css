@@ -54,8 +54,7 @@
 
 /* Neutral shadcn base with DeepPro brand blue (#005AAB) as primary. */
 :root {
-  --font-sans:
-    ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  --font-sans: "Segoe UI", Arial, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --radius: 0.625rem;
   --background: oklch(1 0 0);

@@ -1,4 +1,4 @@
-"use client"
+import { useCurrentPage } from "@/hooks/use-current-page"
 
 import * as React from "react"
 
@@ -20,6 +20,7 @@ export function NavSecondary({
     icon: React.ReactNode
   }[]
 } & React.ComponentPropsWithoutRef<typeof SidebarGroup>) {
+  const page = useCurrentPage()
   return (
     <SidebarGroup {...props}>
       <SidebarGroupContent>
@@ -27,6 +28,8 @@ export function NavSecondary({
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton
+                tooltip={item.title}
+                isActive={page === item.url}
                 className="h-10 text-[15px] [&_svg]:size-[18px]"
                 render={<a href={item.url} />}
               >

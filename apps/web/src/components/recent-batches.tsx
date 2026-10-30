@@ -150,6 +150,12 @@ export function RecentBatches() {
           </div>
           <Select
             value={status}
+            items={[
+              { value: "all", label: "Trạng thái" },
+              ...["Đã xác thực", "Chờ xác thực", "Bản nháp"].map(
+                (value) => ({ value, label: value }),
+              ),
+            ]}
             onValueChange={(value) => {
               setStatus(value ?? "all")
               setPage(1)
@@ -162,7 +168,7 @@ export function RecentBatches() {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">Mọi trạng thái</SelectItem>
+              <SelectItem value="all">Trạng thái</SelectItem>
               {["Đã xác thực", "Chờ xác thực", "Bản nháp"].map((value) => (
                 <SelectItem key={value} value={value}>
                   {value}
@@ -172,6 +178,13 @@ export function RecentBatches() {
           </Select>
           <Select
             value={category}
+            items={[
+              { value: "all", label: "Tất cả sản phẩm" },
+              ...["Thực phẩm bổ sung", "Nông sản"].map((value) => ({
+                value,
+                label: value,
+              })),
+            ]}
             onValueChange={(value) => {
               setCategory(value ?? "all")
               setPage(1)
@@ -184,7 +197,7 @@ export function RecentBatches() {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">Mọi loại sản phẩm</SelectItem>
+              <SelectItem value="all">Tất cả sản phẩm</SelectItem>
               {["Thực phẩm bổ sung", "Nông sản"].map((value) => (
                 <SelectItem key={value} value={value}>
                   {value}

@@ -181,6 +181,11 @@ export function ChartAreaInteractive() {
           </ToggleGroup>
           <Select
             value={timeRange}
+            items={[
+              { value: "90d", label: "90 ngày" },
+              { value: "30d", label: "30 ngày" },
+              { value: "7d", label: "7 ngày" },
+            ]}
             onValueChange={(value) => {
               if (value !== null) {
                 setTimeRange(value)
