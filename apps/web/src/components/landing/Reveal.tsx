@@ -1,57 +1,35 @@
-import { useEffect, useRef, useState, type HTMLAttributes, type PropsWithChildren } from "react"
+import {
+  useEffect,
+  useRef,
+  type HTMLAttributes,
+  type PropsWithChildren,
+} from "react"
 
-export type RevealVariant =
-  | "fade-up"
-  | "slide-right"
-  | "slide-left"
-  | "zoom-in"
-  | "stagger-cards"
-  | "glow-pulse"
-  | "flip-card"
-  | "cube-rotate"
-  | "wave-float"
-
-type RevealProps = PropsWithChildren<HTMLAttributes<HTMLDivElement> & {
-  className?: string
-  delay?: number
-  variant?: RevealVariant
-}>
-
-type RevealCallback = () => void
-let sharedObserver: IntersectionObserver | null = null
-const revealCallbacks = new WeakMap<Element, RevealCallback>()
-let isAnimationDisabled: boolean | null = null
-
-function checkAnimationDisabled(): boolean {
-  if (typeof window === "undefined") return true
-  if (isAnimationDisabled === null) {
-    isAnimationDisabled =
-      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false
+type RevealProps = PropsWithChildren<
+  HTMLAttributes<HTMLDivElement> & {
+    className?: string
+    delay?: number
   }
-  return isAnimationDisabled
-}
+>
+
+let sharedObserver: IntersectionObserver | null = null
 
 function getSharedObserver(): IntersectionObserver | null {
-  if (typeof window === "undefined" || !("IntersectionObserver" in window)) return null
-  if (checkAnimationDisabled()) return null
+  if (typeof window === "undefined" || !("IntersectionObserver" in window))
+    return null
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return null
 
   if (!sharedObserver) {
     sharedObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const callback = revealCallbacks.get(entry.target)
-            if (callback) {
-              callback()
-              revealCallbacks.delete(entry.target)
-            }
-            sharedObserver?.unobserve(entry.target)
-          }
+          entry.target.classList.toggle("is-visible", entry.isIntersecting)
         })
       },
-      { threshold: 0.12, rootMargin: "0px 0px -32px 0px" }
+      { threshold: 0.12, rootMargin: "0px 0px -28px 0px" }
     )
   }
+
   return sharedObserver
 }
 
@@ -59,40 +37,28 @@ export function Reveal({
   children,
   className = "",
   delay = 0,
-  variant = "fade-up",
   ...rest
 }: RevealProps) {
   const elementRef = useRef<HTMLDivElement>(null)
-  const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
     const element = elementRef.current
-    if (!element) return
-
     const observer = getSharedObserver()
-    if (!observer) return
+    if (!element || !observer) return
 
-    revealCallbacks.set(element, () => setIsVisible(true))
+    element.style.transitionDelay = delay ? delay + "ms" : ""
+    element.classList.add("reveal-ready")
     observer.observe(element)
 
     return () => {
-      revealCallbacks.delete(element)
       observer.unobserve(element)
     }
-  }, [])
+  }, [delay])
 
   return (
     <div
       ref={elementRef}
-      className={[
-        "reveal",
-        `reveal--${variant}`,
-        isVisible ? "is-visible" : "",
-        className,
-      ]
-        .filter(Boolean)
-        .join(" ")}
-      style={{ transitionDelay: delay ? delay + "ms" : undefined }}
+      className={["reveal", className].filter(Boolean).join(" ")}
       {...rest}
     >
       {children}

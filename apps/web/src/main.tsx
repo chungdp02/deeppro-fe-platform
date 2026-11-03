@@ -1,8 +1,7 @@
 import { StrictMode } from "react"
 import { createRoot, hydrateRoot } from "react-dom/client"
-
+import "@workspace/ui/globals.css"
 import "@/styles/landing.css"
-import "@/styles/trace-experience.css"
 import { App } from "./App.tsx"
 
 const root = document.getElementById("root")!

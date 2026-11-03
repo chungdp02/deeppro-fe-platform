@@ -37,9 +37,11 @@ dist-ssr
 
 #agent
 .agent
+/.agents/
 
 # Local V4 research captures, browser recordings and QA artifacts.
 /tmp/v4-qa/
+/tmp/
 
 # Generated caches and local visual/test artifacts. Keep files on disk.
 apps/poc-astro/.astro/
@@ -53,3 +55,10 @@ apps/web/.taste-skill/inspect/
 **/playwright-report/
 **/test-results/
 .lighthouseci/
+skills-lock.json
+
+# Local design direction and generated QA/PDF image artifacts.
+/.taste-skill/
+/apps/tmp/
+/apps/web/tmp/
+/docs/LOGO/page_*_img_*.png

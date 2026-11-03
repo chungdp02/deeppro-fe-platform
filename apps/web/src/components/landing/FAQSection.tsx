@@ -1,7 +1,6 @@
+import { DOCUMENTS_URL } from "@/components/landing/navigation"
 import { ArrowIcon } from "@/components/landing/ArrowIcon"
 import { Reveal } from "@/components/landing/Reveal"
-
-const DOCUMENTS_URL = "https://deeptrace.deepprotech.com/documents"
 
 const questions = [
   {
@@ -38,10 +37,14 @@ const questions = [
 
 export function FAQSection() {
   return (
-    <section className="section faq-section" id="faq">
-      <div className="container faq-section__layout">
-        <Reveal className="faq-section__intro" variant="slide-right">
-          <h2>Hỏi đáp về DeepTrace.</h2>
+    <section
+      className="section faq-section"
+      id="faq"
+      aria-labelledby="faq-title"
+    >
+      <div className="faq-section__layout container">
+        <Reveal className="faq-section__intro">
+          <h2 id="faq-title">Hỏi đáp về DeepTrace.</h2>
           <p>
             Tìm hiểu thêm về quy trình truy xuất, ứng dụng của mã QR và cách
             doanh nghiệp bắt đầu với DeepTrace.
@@ -56,14 +59,17 @@ export function FAQSection() {
             <ArrowIcon diagonal />
           </a>
         </Reveal>
-
         <div className="faq-list">
           {questions.map((item, index) => (
-            <Reveal className="faq-item-reveal" delay={index * 35} key={item.question}>
+            <Reveal
+              className="faq-item-reveal"
+              delay={index * 45}
+              key={item.question}
+            >
               <details className="faq-item">
                 <summary>
-                  <span className="faq-item__question">{item.question}</span>
-                  <span className="faq-item__toggle" aria-hidden="true" />
+                  <span>{item.question}</span>
+                  <span className="faq-item__icon" aria-hidden="true" />
                 </summary>
                 <p>{item.answer}</p>
               </details>

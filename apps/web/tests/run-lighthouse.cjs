@@ -4,9 +4,9 @@ const path = require('node:path');
 const zlib = require('node:zlib');
 
 const outputRoot = path.resolve(
-  process.env.TEST_OUTPUT_DIR || path.resolve(__dirname, '../../../tmp/v4-qa')
+  process.env.TEST_OUTPUT_DIR || path.resolve(__dirname, '../../tmp/v10-qa')
 );
-const outDir = path.join(outputRoot, 'lighthouse', 'v5');
+const outDir = path.join(outputRoot, 'lighthouse', 'v10');
 fs.mkdirSync(outDir, { recursive: true });
 
 const url = process.env.TEST_URL || 'http://localhost:4174/';
@@ -18,7 +18,7 @@ const metricIds = {
 };
 
 function runAudit(profile, index) {
-  const outputPath = path.join(outDir, `v5-${profile}-${index}.json`);
+  const outputPath = path.join(outDir, `v10-${profile}-${index}.json`);
   console.log(`Running Lighthouse ${profile} audit ${index}/3...`);
   const cmd = `corepack pnpm dlx lighthouse@13.5.0 ${url} --preset=${profile === 'perf' ? 'perf' : 'desktop'} --chrome-flags="--headless=new --no-sandbox" --output=json --output-path="${outputPath}" "--only-categories=performance,accessibility,best-practices,seo"`;
   execSync(cmd, { stdio: 'inherit', cwd: path.resolve(__dirname, '../..') });
@@ -83,8 +83,8 @@ function calculateStats(runs) {
     gzip: zlib.gzipSync(html).length,
   });
 
-  const summaryPath = path.join(outputRoot, 'v5-performance-summary.json');
+  const summaryPath = path.join(outputRoot, 'v10-performance-summary.json');
   fs.writeFileSync(summaryPath, JSON.stringify(results, null, 2));
-  console.log('\n=== V5 LIGHTHOUSE AUDIT SUMMARY ===');
+  console.log('\n=== V10 LIGHTHOUSE AUDIT SUMMARY ===');
   console.log(JSON.stringify(results, null, 2));
 })();

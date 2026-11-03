@@ -5,25 +5,29 @@
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="shortcut icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      href="/images/v10-hero-harvest-mobile-672.webp"
+      as="image"
+      type="image/webp"
+      fetchpriority="high"
+      media="(max-width: 980px)"
+      imagesrcset="/images/v10-hero-harvest-mobile-480.webp 480w, /images/v10-hero-harvest-mobile-672.webp 672w, /images/v10-hero-harvest-mobile-960.webp 960w"
+      imagesizes="calc(100vw - 40px)"
     />
     <link
       rel="preload"
-      href="/fonts/deeppro/montserrat-vietnamese.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
+      href="/images/v10-hero-harvest-960.webp"
+      as="image"
+      type="image/webp"
+      fetchpriority="high"
+      media="(min-width: 981px)"
+      imagesrcset="/images/v10-hero-harvest-480.webp 480w, /images/v10-hero-harvest-960.webp 960w, /images/v10-hero-harvest-1440.webp 1440w, /images/v10-hero-harvest.webp 1920w"
+      imagesizes="52vw"
     />
     <script>
       const root = document.documentElement
       root.classList.remove("no-js")
-      if (!("IntersectionObserver" in window)) {
-        root.classList.add("no-intersection-observer")
-      }
 
       let savedTheme = null
       try {
@@ -42,7 +46,7 @@
       root.classList.remove("light", "dark")
       root.classList.add(initialTheme)
     </script>
-    <meta name="theme-color" content="#0c263d" />
+    <meta name="theme-color" content="#edeff4" />
     <meta
       name="description"
       content="DeepTrace giúp doanh nghiệp ghi nhận và chia sẻ hành trình truy xuất nguồn gốc sản phẩm từ sản xuất đến người tiêu dùng."

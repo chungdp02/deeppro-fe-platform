@@ -1,4 +1,86 @@
-@import "tailwindcss";
-@source "../../../apps/**/*.{ts,tsx}";
-@source "../../../components/**/*.{ts,tsx}";
-@source "../**/*.{ts,tsx}";
+@layer theme, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@source "../../../../apps/web/src/**/*.{ts,tsx}";
+@source "../components/button.tsx";
+@source "../components/card.tsx";
+@source "../components/badge.tsx";
+@source "../components/sheet.tsx";
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --font-sans:
+    system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-heading: var(--font-sans);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+}
+
+:root {
+  color-scheme: light;
+  --background: #edeff4;
+  --foreground: #0c263d;
+  --card: #ffffff;
+  --card-foreground: #0c263d;
+  --popover: #ffffff;
+  --popover-foreground: #0c263d;
+  --primary: #005aab;
+  --primary-foreground: #ffffff;
+  --secondary: #d8e0e8;
+  --secondary-foreground: #0c263d;
+  --muted: #e4e9f0;
+  --muted-foreground: #334d63;
+  --accent: #add8ff;
+  --accent-foreground: #0c263d;
+  --destructive: #b42318;
+  --border: #d8e0e8;
+  --input: #8ea9c1;
+  --ring: #005aab;
+  --radius: 1rem;
+}
+
+:root.dark {
+  color-scheme: dark;
+  --background: #071d2e;
+  --foreground: #f1f6fb;
+  --card: #0c263d;
+  --card-foreground: #f1f6fb;
+  --popover: #0c263d;
+  --popover-foreground: #f1f6fb;
+  --primary: #add8ff;
+  --primary-foreground: #0c263d;
+  --secondary: #173850;
+  --secondary-foreground: #f1f6fb;
+  --muted: #173850;
+  --muted-foreground: #c3d2df;
+  --accent: #005aab;
+  --accent-foreground: #ffffff;
+  --destructive: #ffb4ab;
+  --border: #315069;
+  --input: #46637b;
+  --ring: #add8ff;
+}

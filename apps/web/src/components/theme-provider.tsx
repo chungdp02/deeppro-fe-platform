@@ -100,9 +100,11 @@ export function ThemeProvider({
   const [theme, setThemeState] = React.useState<Theme>(() => {
     return readStoredTheme(storageKey) ?? defaultTheme
   })
+  const themeRef = React.useRef(theme)
 
   const setTheme = React.useCallback(
     (nextTheme: Theme) => {
+      themeRef.current = nextTheme
       setThemeState(nextTheme)
       try {
         window.localStorage.setItem(storageKey, nextTheme)
@@ -173,19 +175,17 @@ export function ThemeProvider({
         return
       }
 
-      setThemeState((currentTheme) => {
-        const nextTheme =
-          currentTheme === "dark"
-            ? "light"
-            : currentTheme === "light"
-              ? "dark"
-              : getSystemTheme() === "dark"
-                ? "light"
-                : "dark"
+      const currentTheme = themeRef.current
+      const nextTheme =
+        currentTheme === "dark"
+          ? "light"
+          : currentTheme === "light"
+            ? "dark"
+            : getSystemTheme() === "dark"
+              ? "light"
+              : "dark"
 
-        localStorage.setItem(storageKey, nextTheme)
-        return nextTheme
-      })
+      setTheme(nextTheme)
     }
 
     window.addEventListener("keydown", handleKeyDown)
@@ -193,11 +193,13 @@ export function ThemeProvider({
     return () => {
       window.removeEventListener("keydown", handleKeyDown)
     }
-  }, [storageKey])
+  }, [setTheme])
 
   React.useEffect(() => {
     const handleStorageChange = (event: StorageEvent) => {
-      if (event.storageArea !== localStorage) {
+      try {
+        if (event.storageArea !== window.localStorage) return
+      } catch {
         return
       }
 
@@ -206,10 +208,12 @@ export function ThemeProvider({
       }
 
       if (isTheme(event.newValue)) {
+        themeRef.current = event.newValue
         setThemeState(event.newValue)
         return
       }
 
+      themeRef.current = defaultTheme
       setThemeState(defaultTheme)
     }
 

@@ -1,5 +1,4 @@
 import { ArrowIcon } from "@/components/landing/ArrowIcon"
-import { ParallaxImage } from "@/components/landing/ParallaxImage"
 import { Reveal } from "@/components/landing/Reveal"
 
 const features = [
@@ -37,45 +36,59 @@ const features = [
 
 export function FeaturesSection() {
   return (
-    <section className="section features-section" id="features">
-      <div className="container feature-layout">
-        <Reveal className="feature-story" variant="slide-right">
-          <ParallaxImage
-            src="/images/consumer-goods.jpeg"
-            webpSrc="/images/consumer-goods.webp"
-            alt="Các sản phẩm chăm sóc cá nhân được trưng bày tại cửa hàng"
-            width="1200"
-            height="800"
-            speed={0.12}
-          />
-          <div className="feature-story__caption">
-            <strong>
-              Hành trình được tổ chức theo từng sản phẩm và từng lô.
-            </strong>
+    <section
+      className="section features-section"
+      id="features"
+      aria-labelledby="features-title"
+    >
+      <div className="container">
+        <Reveal className="section-heading features-section__heading">
+          <div>
+            <h2 id="features-title">Lợi thế từ Blockchain.</h2>
           </div>
+          <p>
+            Công nghệ Blockchain mang lại những lợi thế độc đáo cho hệ thống
+            truy xuất nguồn gốc DeepTrace, đảm bảo tính minh bạch và bảo mật
+            tuyệt đối.
+          </p>
         </Reveal>
 
-        <Reveal className="feature-copy" delay={100} variant="stagger-cards">
-          <h2>Lợi thế từ Blockchain.</h2>
-          <p className="feature-copy__intro">
-            Công nghệ Blockchain mang lại những lợi thế độc đáo cho hệ thống truy xuất
-            nguồn gốc DeepTrace, đảm bảo tính minh bạch và bảo mật tuyệt đối.
-          </p>
-          <div className="feature-list">
-            {features.map((feature) => (
-              <article className="feature-list__item" key={feature.title}>
-                <div>
-                  <h3>{feature.title}</h3>
+        <div className="features-section__layout">
+          <Reveal className="features-section__visual">
+            <figure>
+              <img
+                src="/images/v10-barcode-delivery-720.webp"
+                srcSet="/images/v10-barcode-delivery-360.webp 360w, /images/v10-barcode-delivery-640.webp 640w, /images/v10-barcode-delivery-720.webp 720w, /images/v10-barcode-delivery.webp 1000w"
+                sizes="(max-width: 980px) calc(100vw - 40px), 40vw"
+                alt="Nhân viên giao nhận dùng điện thoại quét nhãn trên một gói hàng"
+                width="720"
+                height="1080"
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption>
+                Hành trình được tổ chức theo từng sản phẩm và từng lô.
+              </figcaption>
+            </figure>
+          </Reveal>
+          <div className="features-section__list">
+            {features.map((feature, index) => (
+              <Reveal key={feature.title} delay={index * 45}>
+                <details className="feature-row" open={index === 0}>
+                  <summary>
+                    <h3>{feature.title}</h3>
+                    <span aria-hidden="true">+</span>
+                  </summary>
                   <p>{feature.description}</p>
-                </div>
-              </article>
+                </details>
+              </Reveal>
             ))}
+            <a className="text-link" href="#how-it-works">
+              Xem quy trình từng bước
+              <ArrowIcon />
+            </a>
           </div>
-          <a className="text-link" href="#how-it-works">
-            Xem quy trình từng bước
-            <ArrowIcon />
-          </a>
-        </Reveal>
+        </div>
       </div>
     </section>
   )

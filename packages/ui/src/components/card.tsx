@@ -1,13 +1,19 @@
 import * as React from "react"
-import { cn } from "cn"
+import { cn } from "@workspace/ui/lib/utils"
+
+type CardProps = React.ComponentProps<"div"> & {
+  size?: "default" | "sm"
+  as?: "div" | "article"
+}
 
 function Card({
+  as: Element = "div",
   className,
   size = "default",
   ...props
-}: React.ComponentProps<"div"> & { size?: "default" | "sm" }) {
+}: CardProps) {
   return (
-    <div
+    <Element
       data-slot="card"
       data-size={size}
       className={cn(
