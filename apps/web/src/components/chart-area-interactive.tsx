@@ -3,7 +3,7 @@
 import * as React from "react"
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
 
-import { useIsMobile } from "@/hooks/use-mobile"
+import { MOBILE_BREAKPOINT, useIsMobile } from "@/hooks/use-mobile"
 import {
   Card,
   CardAction,
@@ -139,13 +139,20 @@ const chartConfig = {
 
 export function ChartAreaInteractive() {
   const isMobile = useIsMobile()
-  const [timeRange, setTimeRange] = React.useState("90d")
+  const [timeRange, setTimeRange] = React.useState(() =>
+    isMobile ? "7d" : "90d"
+  )
 
   React.useEffect(() => {
-    if (isMobile) {
-      setTimeRange("7d")
+    const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`)
+    const onChange = (event: MediaQueryListEvent) => {
+      if (event.matches) {
+        setTimeRange("7d")
+      }
     }
-  }, [isMobile])
+    mql.addEventListener("change", onChange)
+    return () => mql.removeEventListener("change", onChange)
+  }, [])
 
   const days = timeRange === "7d" ? 7 : timeRange === "30d" ? 30 : 90
 

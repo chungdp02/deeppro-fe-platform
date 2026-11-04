@@ -1,0 +1,47 @@
+[
+  {
+    "id": "SP-001",
+    "name": "Rượu Sâm Đinh Lăng 500ML",
+    "category": "Thực phẩm bổ sung",
+    "origin": "Việt Nam",
+    "weight": "500ml",
+    "gtin": "8938533564237",
+    "group": "main"
+  },
+  {
+    "id": "SP-002",
+    "name": "Rượu Sâm Đinh Lăng 500ML Cao Cấp",
+    "category": "Thực phẩm bổ sung",
+    "origin": "Việt Nam",
+    "weight": "500ml",
+    "gtin": "8938533564060",
+    "group": "main"
+  },
+  {
+    "id": "SP-003",
+    "name": "Rượu Sâm Đinh Lăng 300ml",
+    "category": "Thực phẩm bổ sung",
+    "origin": "Việt Nam",
+    "weight": "300ml",
+    "gtin": "8938533564244",
+    "group": "main"
+  },
+  {
+    "id": "SP-004",
+    "name": "Bộ tiêu chuẩn OCOP TP.HCM",
+    "category": "Nông sản",
+    "origin": "Việt Nam",
+    "weight": "",
+    "gtin": "2599999999901",
+    "group": "main"
+  },
+  {
+    "id": "SP-005",
+    "name": "Trà thảo mộc đóng hộp",
+    "category": "Nông sản",
+    "origin": "Việt Nam",
+    "weight": "200g",
+    "gtin": "8938533564251",
+    "group": "sub"
+  }
+]

@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from "react"
+import { useTranslation } from "react-i18next"
 import {
   SearchIcon,
   PlusIcon,
@@ -90,6 +91,7 @@ const emptyDraft = {
 let sessionEmployees = initialEmployees
 
 export default function EmployeesPage() {
+  const { t } = useTranslation()
   const [employees, setEmployees] = useState(sessionEmployees)
   const [search, setSearch] = useState("")
   const [role, setRole] = useState("all")
@@ -183,7 +185,9 @@ export default function EmployeesPage() {
           <p className="mb-2 text-xs font-medium tracking-wider text-primary">
             QUẢN LÝ THÀNH VIÊN
           </p>
-          <h1 className="text-3xl font-semibold">Nhân viên</h1>
+          <h1 className="text-3xl font-semibold">
+            {t("page.employees.title")}
+          </h1>
           <p className="mt-2 text-sm text-muted-foreground">
             Quản lý thông tin, vai trò và trạng thái thành viên doanh nghiệp.
           </p>

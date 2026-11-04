@@ -1,4 +1,5 @@
 import * as React from "react"
+import { useTranslation } from "react-i18next"
 import deepTraceLogo from "@/assets/DeepTrace.png"
 
 import { NavMain } from "@/components/nav-main"
@@ -27,51 +28,52 @@ const data = {
   },
   navMain: [
     {
-      title: "Tổng quan",
+      titleKey: "nav.overview",
       url: "#tong-quan",
       icon: <LayoutDashboardIcon />,
     },
     {
-      title: "Công ty",
+      titleKey: "nav.company",
       url: "#cong-ty",
       icon: <Building2Icon />,
     },
     {
-      title: "Sản phẩm",
+      titleKey: "nav.products",
       url: "#san-pham",
       icon: <PackageIcon />,
     },
     {
-      title: "Nhân viên",
+      titleKey: "nav.employees",
       url: "#nhan-vien",
       icon: <UsersIcon />,
     },
     {
-      title: "Hướng dẫn",
+      titleKey: "nav.guide",
       url: "#huong-dan",
       icon: <BookOpenIcon />,
     },
   ],
   navSecondary: [
     {
-      title: "Cài đặt",
+      titleKey: "nav.settings",
       url: "#cai-dat",
       icon: <Settings2Icon />,
     },
     {
-      title: "Trợ giúp",
+      titleKey: "nav.help",
       url: "#tro-giup",
       icon: <CircleHelpIcon />,
     },
   ],
 }
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { t } = useTranslation()
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader className="gap-0 p-0">
         <a
           href="#tong-quan"
-          aria-label="DeepTrace - Tổng quan"
+          aria-label={`DeepTrace - ${t("nav.overview")}`}
           className="flex h-16 items-center border-b border-sidebar-border/20 px-4 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
         >
           <span className="relative block h-9 w-44 overflow-hidden group-data-[collapsible=icon]:w-9">
@@ -84,11 +86,22 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </a>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
+        <NavMain
+          items={data.navMain.map(({ titleKey, ...item }) => ({
+            ...item,
+            title: t(titleKey),
+          }))}
+        />
+        <NavSecondary
+          items={data.navSecondary.map(({ titleKey, ...item }) => ({
+            ...item,
+            title: t(titleKey),
+          }))}
+          className="mt-auto"
+        />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={{ ...data.user, name: t("user.admin") }} />
       </SidebarFooter>
     </Sidebar>
   )

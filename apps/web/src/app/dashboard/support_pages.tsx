@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from "react"
+import { useTranslation } from "react-i18next"
 import {
   BookOpenIcon,
   QrCodeIcon,
@@ -82,11 +83,12 @@ const pageClass =
   "mx-auto flex w-full max-w-[1400px] flex-col gap-6 px-4 py-6 lg:px-8 lg:py-8"
 
 export function GuidePage() {
+  const { t } = useTranslation()
   return (
     <main className={pageClass}>
       <Heading
-        title="Hướng dẫn sử dụng"
-        description="Làm quen với không gian quản lý doanh nghiệp DeepTrace."
+        title={t("page.guide.title")}
+        description={t("page.guide.description")}
       />
       <Tabs defaultValue="overview" className="gap-6">
         <TabsList className="h-auto w-full flex-wrap justify-start">
@@ -275,6 +277,7 @@ function FaqList({ items }: { items: typeof faqs }) {
 }
 
 export function HelpPage() {
+  const { t } = useTranslation()
   const [search, setSearch] = useState("")
   const rows = faqs.filter((item) =>
     (item.question + item.answer)
@@ -284,8 +287,8 @@ export function HelpPage() {
   return (
     <main className={pageClass}>
       <Heading
-        title="Trợ giúp"
-        description="Tìm câu trả lời và hướng dẫn cho các thao tác thường dùng."
+        title={t("page.help.title")}
+        description={t("page.help.description")}
       />
       <div className="relative max-w-xl">
         <SearchIcon className="pointer-events-none absolute top-1/2 left-3 z-10 size-4 -translate-y-1/2 text-muted-foreground" />
@@ -317,6 +320,7 @@ export function HelpPage() {
   )
 }
 export function SettingsPage() {
+  const { t, i18n } = useTranslation()
   const { theme, setTheme } = useTheme()
   const [saved, setSaved] = useState(false)
   const [choice, setChoice] = useState(theme)
@@ -328,26 +332,24 @@ export function SettingsPage() {
   return (
     <main className={pageClass}>
       <Heading
-        title="Cài đặt"
-        description="Điều chỉnh cách hiển thị không gian làm việc trên thiết bị của bạn."
+        title={t("page.settings.title")}
+        description={t("page.settings.description")}
       />
       <Card className="max-w-2xl">
         <CardHeader>
-          <CardTitle>Giao diện</CardTitle>
-          <CardDescription>
-            Lựa chọn được áp dụng cho thiết bị hiện tại.
-          </CardDescription>
+          <CardTitle>{t("page.settings.appearance")}</CardTitle>
+          <CardDescription>{t("page.settings.appliedLocally")}</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={save} className="space-y-5">
             <div className="space-y-2">
-              <Label>Chế độ hiển thị</Label>
+              <Label>{t("page.settings.displayMode")}</Label>
               <Select
                 value={choice}
                 items={[
-                  { value: "light", label: "Sáng" },
-                  { value: "dark", label: "Tối" },
-                  { value: "system", label: "Theo thiết bị" },
+                  { value: "light", label: t("page.settings.light") },
+                  { value: "dark", label: t("page.settings.dark") },
+                  { value: "system", label: t("page.settings.system") },
                 ]}
                 onValueChange={(value) => {
                   if (
@@ -360,21 +362,30 @@ export function SettingsPage() {
                   }
                 }}
               >
-                <SelectTrigger aria-label="Chế độ hiển thị" className="w-full">
+                <SelectTrigger
+                  aria-label={t("page.settings.displayMode")}
+                  className="w-full"
+                >
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="light">Sáng</SelectItem>
-                  <SelectItem value="dark">Tối</SelectItem>
-                  <SelectItem value="system">Theo thiết bị</SelectItem>
+                  <SelectItem value="light">
+                    {t("page.settings.light")}
+                  </SelectItem>
+                  <SelectItem value="dark">
+                    {t("page.settings.dark")}
+                  </SelectItem>
+                  <SelectItem value="system">
+                    {t("page.settings.system")}
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="flex items-center gap-4">
-              <Button type="submit">Lưu cài đặt</Button>
+              <Button type="submit">{t("page.settings.save")}</Button>
               {saved && (
                 <p role="status" className="text-sm text-primary">
-                  Đã lưu giao diện.
+                  {t("page.settings.saved")}
                 </p>
               )}
             </div>
@@ -383,14 +394,17 @@ export function SettingsPage() {
       </Card>
       <Card className="max-w-2xl">
         <CardHeader>
-          <CardTitle>Thông tin không gian làm việc</CardTitle>
+          <CardTitle>{t("page.settings.workspaceInfo")}</CardTitle>
         </CardHeader>
         <CardContent>
           <dl className="divide-y text-sm">
             {[
-              ["Doanh nghiệp", "Công ty Cổ phần Thực phẩm ABZ"],
-              ["Ngôn ngữ", "Tiếng Việt"],
-              ["Múi giờ", "Asia/Bangkok (UTC+7)"],
+              [t("page.settings.company"), "Công ty Cổ phần Thực phẩm ABZ"],
+              [
+                t("language"),
+                i18n.language === "en" ? "English" : "Tiếng Việt",
+              ],
+              [t("page.settings.timeZone"), "Asia/Bangkok (UTC+7)"],
             ].map(([title, value]) => (
               <div
                 key={title}

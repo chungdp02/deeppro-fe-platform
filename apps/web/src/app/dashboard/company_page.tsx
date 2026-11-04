@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next"
 import {
   Card,
   CardContent,
@@ -40,15 +41,16 @@ const companySections = [
 ]
 
 export default function Page() {
+  const { t } = useTranslation()
   return (
     <>
       <main className="mx-auto w-full max-w-7xl space-y-6 p-4 md:p-8">
         <div>
           <h1 className="text-2xl font-semibold text-foreground">
-            Thông tin doanh nghiệp
+            {t("page.company.title")}
           </h1>
           <p className="mt-2 text-sm text-muted-foreground">
-            Quản lý thông tin và hồ sơ pháp lý của doanh nghiệp.
+            {t("page.company.description")}
           </p>
         </div>
 

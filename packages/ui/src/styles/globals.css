@@ -54,7 +54,7 @@
 
 /* Neutral shadcn base with DeepPro brand blue (#005AAB) as primary. */
 :root {
-  --font-sans: "Segoe UI", Arial, sans-serif;
+  --font-sans: "Be Vietnam Pro", Manrope, ui-sans-serif, system-ui, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --radius: 0.625rem;
   --background: oklch(1 0 0);

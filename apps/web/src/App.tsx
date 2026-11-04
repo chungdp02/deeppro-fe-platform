@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next"
 import {
   GuidePage,
   HelpPage,
@@ -11,6 +12,7 @@ import { useCurrentPage } from "./hooks/use-current-page"
 import { DashboardLayout } from "./components/dashboard-layout"
 
 export function App() {
+  const { t } = useTranslation()
   const page = useCurrentPage()
   const content =
     page === "#tong-quan" ? (
@@ -29,12 +31,12 @@ export function App() {
       <HelpPage />
     ) : (
       <main className="p-8">
-        <h1 className="text-2xl font-semibold">Không tìm thấy trang</h1>
+        <h1 className="text-2xl font-semibold">{t("page.notFound")}</h1>
         <a
           href="#tong-quan"
           className="mt-4 inline-block text-primary underline"
         >
-          Về Tổng quan
+          {t("page.backToOverview")}
         </a>
       </main>
     )
