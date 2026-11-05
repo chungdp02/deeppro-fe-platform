@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from "react"
 import { useTranslation } from "react-i18next"
+import { Link } from "react-router"
 import {
   BookOpenIcon,
   QrCodeIcon,
@@ -33,38 +34,7 @@ import {
   SelectItem,
 } from "@workspace/ui/components/select"
 
-const faqs = [
-  {
-    question: "Làm thế nào để thêm sản phẩm?",
-    answer:
-      "Vào Sản phẩm, chọn Thêm sản phẩm, nhập tên, xuất xứ và các thông tin bổ sung rồi chọn Lưu sản phẩm. GTIN nếu nhập cần có 8, 12, 13 hoặc 14 chữ số và không trùng sản phẩm khác.",
-  },
-  {
-    question: "Có thể lọc danh sách như thế nào?",
-    answer:
-      "Ở Sản phẩm, nhập tên hoặc GTIN và chọn loại sản phẩm. Ở Nhân viên, tìm theo tên hoặc email, kết hợp bộ lọc vai trò và trạng thái. Chọn Xóa bộ lọc để xem lại danh sách.",
-  },
-  {
-    question: "Dữ liệu mới có được lưu sau khi tải lại trang?",
-    answer:
-      "Sản phẩm và nhân viên hiện dùng dữ liệu mẫu. Thay đổi được giữ khi chuyển mục trong phiên, nhưng sẽ khôi phục khi tải lại trang. Chưa kết nối máy chủ.",
-  },
-  {
-    question: "Thêm nhân viên có gửi email mời không?",
-    answer:
-      "Chưa. Thao tác hiện chỉ cập nhật danh sách mẫu, không tạo tài khoản, gửi thư hay thay đổi quyền truy cập thật.",
-  },
-  {
-    question: "Xuất báo cáo lô hàng ở đâu?",
-    answer:
-      "Vào Tổng quan, tìm bảng Lô hàng gần đây và chọn Xuất CSV. File xuất chứa những dòng phù hợp với bộ lọc hiện tại.",
-  },
-  {
-    question: "Làm sao thu gọn thanh bên?",
-    answer:
-      "Bấm nút thu gọn trên thanh điều hướng phía trên. Sidebar sẽ giữ các icon chức năng; rê chuột lên icon để xem tên mục.",
-  },
-]
+const faqKeys = ["addProduct", "filter", "persistence", "invite", "export", "sidebar"] as const
 function Heading({
   title,
   description,
@@ -92,58 +62,55 @@ export function GuidePage() {
       />
       <Tabs defaultValue="overview" className="gap-6">
         <TabsList className="h-auto w-full flex-wrap justify-start">
-          <TabsTrigger value="overview">Tổng quan</TabsTrigger>
-          <TabsTrigger value="start">Bắt đầu</TabsTrigger>
-          <TabsTrigger value="features">Tính năng</TabsTrigger>
-          <TabsTrigger value="faq">Câu hỏi thường gặp</TabsTrigger>
+          <TabsTrigger value="overview">{t("page.guide.tabs.overview")}</TabsTrigger>
+          <TabsTrigger value="start">{t("page.guide.tabs.start")}</TabsTrigger>
+          <TabsTrigger value="features">{t("page.guide.tabs.features")}</TabsTrigger>
+          <TabsTrigger value="faq">{t("page.guide.tabs.faq")}</TabsTrigger>
         </TabsList>
         <TabsContent value="overview">
           <div className="grid gap-6 lg:grid-cols-3">
             <Card className="lg:col-span-2">
               <CardHeader>
-                <CardTitle>Quản lý doanh nghiệp cùng DeepTrace</CardTitle>
+                <CardTitle>{t("page.guide.intro.title")}</CardTitle>
                 <CardDescription>
-                  Một không gian thống nhất cho sản phẩm, lô hàng và thành viên.
+                  {t("page.guide.intro.description")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-5 text-sm leading-7">
                 <p>
-                  Dashboard giúp doanh nghiệp theo dõi danh mục sản phẩm, thông
-                  tin doanh nghiệp và hoạt động truy xuất. Các trang được tổ
-                  chức theo menu bên trái để chuyển nhanh giữa các nghiệp vụ.
+                  {t("page.guide.intro.body")}
                 </p>
                 <div className="rounded-xl bg-accent p-4 text-accent-foreground">
-                  <p className="font-semibold">Bắt đầu từ danh mục sản phẩm</p>
+                  <p className="font-semibold">{t("page.guide.intro.highlightTitle")}</p>
                   <p className="mt-1">
-                    Kiểm tra thông tin doanh nghiệp, bổ sung sản phẩm rồi quản
-                    lý thành viên tham gia hệ thống.
+                    {t("page.guide.intro.highlightText")}
                   </p>
                 </div>
-                <Button render={<a href="#san-pham" />}>
-                  Quản lý sản phẩm
+                <Button nativeButton={false} render={<Link to="/san-pham" />}>
+                  {t("page.guide.intro.manageProducts")}
                   <ArrowUpRightIcon className="size-4" />
                 </Button>
               </CardContent>
             </Card>
             <Card>
               <CardHeader>
-                <CardTitle>Truy cập nhanh</CardTitle>
+                <CardTitle>{t("page.guide.intro.quickAccess")}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
                 {[
                   {
-                    title: "Hồ sơ công ty",
-                    href: "#cong-ty",
+                    title: t("page.guide.intro.companyProfile"),
+                    href: "/cong-ty",
                     icon: BookOpenIcon,
                   },
                   {
-                    title: "Danh mục sản phẩm",
-                    href: "#san-pham",
+                    title: t("page.guide.intro.productCatalog"),
+                    href: "/san-pham",
                     icon: PackageIcon,
                   },
                   {
-                    title: "Thành viên doanh nghiệp",
-                    href: "#nhan-vien",
+                    title: t("page.guide.intro.companyMembers"),
+                    href: "/nhan-vien",
                     icon: UsersIcon,
                   },
                 ].map(({ title, href, icon: Icon }) => (
@@ -151,7 +118,8 @@ export function GuidePage() {
                     key={href}
                     variant="outline"
                     className="w-full justify-start"
-                    render={<a href={href} />}
+                    nativeButton={false}
+                    render={<Link to={href} />}
                   >
                     <Icon className="size-4" />
                     {title}
@@ -164,37 +132,37 @@ export function GuidePage() {
         <TabsContent value="start">
           <Card>
             <CardHeader>
-              <CardTitle>Các bước làm quen</CardTitle>
+              <CardTitle>{t("page.guide.start.title")}</CardTitle>
               <CardDescription>
-                Thực hiện theo thứ tự để khám phá giao diện.
+                {t("page.guide.start.description")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-5">
               {[
                 [
-                  "Kiểm tra doanh nghiệp",
-                  "Mở mục Công ty để xem thông tin liên hệ, pháp lý và thống kê.",
-                  "#cong-ty",
+                  t("page.guide.start.companyTitle"),
+                  t("page.guide.start.companyText"),
+                  "/cong-ty",
                 ],
                 [
-                  "Bổ sung sản phẩm",
-                  "Chọn Thêm sản phẩm, điền thông tin và lưu. Có thể chỉnh sửa hoặc xóa sau đó.",
-                  "#san-pham",
+                  t("page.guide.start.productTitle"),
+                  t("page.guide.start.productText"),
+                  "/san-pham",
                 ],
                 [
-                  "Quản lý nhân viên",
-                  "Thêm thông tin thành viên, chọn vai trò và trạng thái phù hợp.",
-                  "#nhan-vien",
+                  t("page.guide.start.employeeTitle"),
+                  t("page.guide.start.employeeText"),
+                  "/nhan-vien",
                 ],
                 [
-                  "Theo dõi hoạt động",
-                  "Xem biểu đồ QR, lọc lô hàng và xuất CSV tại trang Tổng quan.",
-                  "#tong-quan",
+                  t("page.guide.start.activityTitle"),
+                  t("page.guide.start.activityText"),
+                  "/tong-quan",
                 ],
               ].map(([title, text, href], index) => (
-                <a
+                <Link
                   key={href}
-                  href={href}
+                  to={href}
                   className="flex gap-4 rounded-xl border p-4 transition-colors hover:bg-accent"
                 >
                   <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground">
@@ -204,7 +172,7 @@ export function GuidePage() {
                     <p className="font-medium">{title}</p>
                     <p className="mt-1 text-sm text-muted-foreground">{text}</p>
                   </div>
-                </a>
+                </Link>
               ))}
             </CardContent>
           </Card>
@@ -213,23 +181,23 @@ export function GuidePage() {
           <div className="grid gap-4 sm:grid-cols-2">
             {[
               {
-                title: "Danh mục sản phẩm",
-                text: "Hai nhóm sản phẩm chính và thầu phụ. Hỗ trợ tìm kiếm, lọc, sắp xếp, thêm, sửa và xóa.",
+                title: t("page.guide.features.productsTitle"),
+                text: t("page.guide.features.productsText"),
                 icon: PackageIcon,
               },
               {
-                title: "Nhân viên",
-                text: "Quản lý thông tin thành viên, kiểm tra email trùng, lọc vai trò và trạng thái.",
+                title: t("page.guide.features.employeesTitle"),
+                text: t("page.guide.features.employeesText"),
                 icon: UsersIcon,
               },
               {
-                title: "Truy xuất QR",
-                text: "Biểu đồ lượt truy xuất mẫu theo khoảng thời gian và bảng lô hàng có xuất CSV.",
+                title: t("page.guide.features.qrTitle"),
+                text: t("page.guide.features.qrText"),
                 icon: QrCodeIcon,
               },
               {
-                title: "Hồ sơ doanh nghiệp",
-                text: "Tổng hợp thông tin doanh nghiệp, liên hệ và hồ sơ pháp lý để tra cứu.",
+                title: t("page.guide.features.companyTitle"),
+                text: t("page.guide.features.companyText"),
                 icon: BookOpenIcon,
               },
             ].map(({ title, text, icon: Icon }) => (
@@ -246,13 +214,24 @@ export function GuidePage() {
           </div>
         </TabsContent>
         <TabsContent value="faq">
-          <FaqList items={faqs} />
+          <FaqList />
         </TabsContent>
       </Tabs>
     </main>
   )
 }
-function FaqList({ items }: { items: typeof faqs }) {
+function FaqList({ search = "" }: { search?: string }) {
+  const { t } = useTranslation()
+  const items = faqKeys
+    .map((key) => ({
+      question: t(`page.help.faq.${key}.question`),
+      answer: t(`page.help.faq.${key}.answer`),
+    }))
+    .filter((item) =>
+      (item.question + item.answer)
+        .toLocaleLowerCase()
+        .includes(search.trim().toLocaleLowerCase())
+    )
   return (
     <Card>
       <CardContent className="divide-y">
@@ -268,7 +247,7 @@ function FaqList({ items }: { items: typeof faqs }) {
         ))}
         {!items.length && (
           <p className="py-8 text-center text-sm text-muted-foreground">
-            Không tìm thấy câu trả lời. Hãy thử từ khóa khác.
+            {t("page.help.empty")}
           </p>
         )}
       </CardContent>
@@ -279,11 +258,6 @@ function FaqList({ items }: { items: typeof faqs }) {
 export function HelpPage() {
   const { t } = useTranslation()
   const [search, setSearch] = useState("")
-  const rows = faqs.filter((item) =>
-    (item.question + item.answer)
-      .toLocaleLowerCase("vi")
-      .includes(search.trim().toLocaleLowerCase("vi"))
-  )
   return (
     <main className={pageClass}>
       <Heading
@@ -294,24 +268,27 @@ export function HelpPage() {
         <SearchIcon className="pointer-events-none absolute top-1/2 left-3 z-10 size-4 -translate-y-1/2 text-muted-foreground" />
         <Input
           className="bg-background pl-9"
-          aria-label="Tìm câu trả lời"
-          placeholder="Tìm câu hỏi về sản phẩm, nhân viên..."
+          aria-label={t("page.help.search")}
+          placeholder={t("page.help.searchPlaceholder")}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
       </div>
-      <FaqList items={rows} />
+      <FaqList search={search} />
       <Card>
         <CardHeader>
-          <CardTitle>Cần trao đổi thêm?</CardTitle>
+          <CardTitle>{t("page.help.contactTitle")}</CardTitle>
           <CardDescription>
-            Liên hệ người quản trị dự án qua kênh nội bộ của nhóm. Khi báo lỗi,
-            cung cấp tên mục, thao tác đã thực hiện và thông báo trên màn hình.
+            {t("page.help.contactText")}
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Button variant="outline" render={<a href="#huong-dan" />}>
-            Xem hướng dẫn sử dụng
+          <Button
+            variant="outline"
+            nativeButton={false}
+            render={<Link to="/huong-dan" />}
+          >
+            {t("page.help.viewGuide")}
             <ArrowUpRightIcon className="size-4" />
           </Button>
         </CardContent>

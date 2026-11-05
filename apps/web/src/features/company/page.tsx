@@ -6,42 +6,41 @@ import {
   CardTitle,
 } from "@workspace/ui/components/card"
 
-const companySections = [
-  {
-    title: "Thông tin doanh nghiệp",
-    fields: [
-      { label: "Tên doanh nghiệp", value: "Công ty Cổ phần Thực phẩm ABZ" },
-      { label: "Nhóm ngành", value: "Thực phẩm" },
-      { label: "Trạng thái", value: "Hoạt động" },
-    ],
-  },
-  {
-    title: "Liên hệ & Địa chỉ",
-    fields: [
-      { label: "Email", value: "abz@example.com" },
-      { label: "Số điện thoại", value: "090 123 4567" },
-      { label: "Địa chỉ", value: "Thành phố Hồ Chí Minh" },
-    ],
-  },
-  {
-    title: "Thông tin pháp lý",
-    fields: [
-      { label: "Mã số thuế", value: "Chưa cập nhật" },
-      { label: "Số giấy phép", value: "Chưa cập nhật" },
-      { label: "Ngày cấp", value: "Chưa cập nhật" },
-    ],
-  },
-  {
-    title: "Thống kê hoạt động",
-    fields: [
-      { label: "Tổng số sản phẩm", value: "4" },
-      { label: "Tổng số nhân viên", value: "3" },
-    ],
-  },
-]
-
 export default function Page() {
   const { t } = useTranslation()
+  const companySections = [
+  {
+    title: t("page.company.title"),
+    fields: [
+      { label: t("page.company.name"), value: "Công ty Cổ phần Thực phẩm ABZ" },
+      { label: t("page.company.industry"), value: t("page.company.foodIndustry") },
+      { label: t("page.company.status"), value: t("page.company.active") },
+    ],
+  },
+  {
+    title: t("page.company.contact"),
+    fields: [
+      { label: "Email", value: "abz@example.com" },
+      { label: t("page.company.phone"), value: "090 123 4567" },
+      { label: t("page.company.address"), value: t("page.company.city") },
+    ],
+  },
+  {
+    title: t("page.company.legal"),
+    fields: [
+      { label: t("page.company.taxCode"), value: t("page.company.notUpdated") },
+      { label: t("page.company.license"), value: t("page.company.notUpdated") },
+      { label: t("page.company.issueDate"), value: t("page.company.notUpdated") },
+    ],
+  },
+  {
+    title: t("page.company.activity"),
+    fields: [
+      { label: t("page.company.productCount"), value: "4" },
+      { label: t("page.company.employeeCount"), value: "3" },
+    ],
+  },
+  ]
   return (
     <>
       <main className="mx-auto w-full max-w-7xl space-y-6 p-4 md:p-8">

@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 import { DownloadIcon, SearchIcon, PackageIcon } from "lucide-react"
 import { Badge } from "@workspace/ui/components/badge"
 import { Button } from "@workspace/ui/components/button"
@@ -78,6 +79,17 @@ const batches = [
 ]
 
 export function RecentBatches() {
+  const { t } = useTranslation()
+  const statusLabel = (value: string) =>
+    value === "Đã xác thực"
+      ? t("page.overview.recentBatches.verified")
+      : value === "Chờ xác thực"
+        ? t("page.overview.recentBatches.pending")
+        : t("page.overview.recentBatches.draft")
+  const categoryLabel = (value: string) =>
+    value === "Nông sản"
+      ? t("page.products.agriculture")
+      : t("page.products.food")
   const [search, setSearch] = useState("")
   const [status, setStatus] = useState("all")
   const [category, setCategory] = useState("all")
@@ -94,14 +106,21 @@ export function RecentBatches() {
   const visible = rows.slice((page - 1) * 5, page * 5)
   function exportCsv() {
     const csv = [
-      ["Mã lô", "Sản phẩm", "Loại", "Ngày tạo", "Số lượng", "Trạng thái"],
+      [
+        t("page.overview.recentBatches.code"),
+        t("page.overview.recentBatches.product"),
+        t("page.overview.recentBatches.category"),
+        t("page.overview.recentBatches.created"),
+        t("page.overview.recentBatches.quantity"),
+        t("page.overview.recentBatches.status"),
+      ],
       ...rows.map((item) => [
         item.id,
         item.product,
-        item.category,
+        categoryLabel(item.category),
         item.date,
         item.quantity,
-        item.status,
+        statusLabel(item.status),
       ]),
     ]
       .map((row) =>
@@ -123,14 +142,14 @@ export function RecentBatches() {
     <Card>
       <CardHeader className="gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="space-y-1">
-          <CardTitle>Lô hàng gần đây</CardTitle>
+          <CardTitle>{t("page.overview.recentBatches.title")}</CardTitle>
           <CardDescription>
-            Theo dõi tiến độ xác thực và thông tin sản phẩm.
+            {t("page.overview.recentBatches.description")}
           </CardDescription>
         </div>
         <Button variant="outline" onClick={exportCsv} disabled={!rows.length}>
           <DownloadIcon className="size-4" />
-          Xuất CSV
+          {t("page.overview.recentBatches.export")}
         </Button>
       </CardHeader>
       <CardContent className="space-y-5">
@@ -138,8 +157,8 @@ export function RecentBatches() {
           <div className="relative min-w-48 flex-1">
             <SearchIcon className="absolute top-2.5 left-3 size-4 text-muted-foreground" />
             <Input
-              aria-label="Tìm lô hàng"
-              placeholder="Tìm mã lô, tên sản phẩm..."
+              aria-label={t("page.overview.recentBatches.search")}
+              placeholder={t("page.overview.recentBatches.searchPlaceholder")}
               className="pl-9"
               value={search}
               onChange={(e) => {
@@ -151,9 +170,9 @@ export function RecentBatches() {
           <Select
             value={status}
             items={[
-              { value: "all", label: "Trạng thái" },
+              { value: "all", label: t("page.overview.recentBatches.status") },
               ...["Đã xác thực", "Chờ xác thực", "Bản nháp"].map(
-                (value) => ({ value, label: value }),
+                (value) => ({ value, label: statusLabel(value) }),
               ),
             ]}
             onValueChange={(value) => {
@@ -162,16 +181,16 @@ export function RecentBatches() {
             }}
           >
             <SelectTrigger
-              aria-label="Lọc trạng thái"
+              aria-label={t("page.overview.recentBatches.statusFilter")}
               className="w-full sm:w-44"
             >
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">Trạng thái</SelectItem>
+              <SelectItem value="all">{t("page.overview.recentBatches.status")}</SelectItem>
               {["Đã xác thực", "Chờ xác thực", "Bản nháp"].map((value) => (
                 <SelectItem key={value} value={value}>
-                  {value}
+                  {statusLabel(value)}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -179,10 +198,10 @@ export function RecentBatches() {
           <Select
             value={category}
             items={[
-              { value: "all", label: "Tất cả sản phẩm" },
+              { value: "all", label: t("page.overview.recentBatches.allCategories") },
               ...["Thực phẩm bổ sung", "Nông sản"].map((value) => ({
                 value,
-                label: value,
+                label: categoryLabel(value),
               })),
             ]}
             onValueChange={(value) => {
@@ -191,16 +210,16 @@ export function RecentBatches() {
             }}
           >
             <SelectTrigger
-              aria-label="Lọc loại sản phẩm"
+              aria-label={t("page.overview.recentBatches.categoryFilter")}
               className="w-full sm:w-52"
             >
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">Tất cả sản phẩm</SelectItem>
+              <SelectItem value="all">{t("page.overview.recentBatches.allCategories")}</SelectItem>
               {["Thực phẩm bổ sung", "Nông sản"].map((value) => (
                 <SelectItem key={value} value={value}>
-                  {value}
+                  {categoryLabel(value)}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -215,7 +234,7 @@ export function RecentBatches() {
                 setPage(1)
               }}
             >
-              Xóa bộ lọc
+              {t("page.overview.recentBatches.clearFilters")}
             </Button>
           )}
         </div>
@@ -224,11 +243,11 @@ export function RecentBatches() {
             <TableHeader className="bg-muted/60">
               <TableRow>
                 {[
-                  "Mã lô",
-                  "Sản phẩm",
-                  "Ngày tạo",
-                  "Số lượng",
-                  "Trạng thái",
+                  t("page.overview.recentBatches.code"),
+                  t("page.overview.recentBatches.product"),
+                  t("page.overview.recentBatches.created"),
+                  t("page.overview.recentBatches.quantity"),
+                  t("page.overview.recentBatches.status"),
                 ].map((title) => (
                   <TableHead key={title} className="px-4">
                     {title}
@@ -250,7 +269,7 @@ export function RecentBatches() {
                       <div>
                         <p className="font-medium">{item.product}</p>
                         <p className="mt-1 text-xs text-muted-foreground">
-                          {item.category}
+                          {categoryLabel(item.category)}
                         </p>
                       </div>
                     </div>
@@ -270,7 +289,7 @@ export function RecentBatches() {
                           : "text-muted-foreground"
                       }
                     >
-                      {item.status}
+                      {statusLabel(item.status)}
                     </Badge>
                   </TableCell>
                 </TableRow>
@@ -281,7 +300,7 @@ export function RecentBatches() {
                     colSpan={5}
                     className="h-32 text-center text-muted-foreground"
                   >
-                    Không tìm thấy lô hàng phù hợp. Hãy thử xóa bộ lọc.
+                    {t("page.overview.recentBatches.empty")}
                   </TableCell>
                 </TableRow>
               )}
@@ -290,7 +309,11 @@ export function RecentBatches() {
         </div>
         <div className="flex flex-wrap items-center justify-between gap-3 text-sm">
           <p className="text-muted-foreground" aria-live="polite">
-            {rows.length} lô hàng · Trang {page}/{pages}
+            {t("page.overview.recentBatches.pagination", {
+              count: rows.length,
+              page,
+              pages,
+            })}
           </p>
           <div className="flex gap-2">
             <Button
@@ -299,7 +322,7 @@ export function RecentBatches() {
               disabled={page === 1}
               onClick={() => setPage(page - 1)}
             >
-              Trước
+              {t("page.overview.recentBatches.previous")}
             </Button>
             <Button
               size="sm"
@@ -307,7 +330,7 @@ export function RecentBatches() {
               disabled={page >= pages}
               onClick={() => setPage(page + 1)}
             >
-              Sau
+              {t("page.overview.recentBatches.next")}
             </Button>
           </div>
         </div>

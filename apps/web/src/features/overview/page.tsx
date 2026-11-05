@@ -1,8 +1,9 @@
 import { ArrowUpRightIcon, Building2Icon } from "lucide-react"
 import { useTranslation } from "react-i18next"
-import { ChartAreaInteractive } from "@/components/chart-area-interactive"
-import { RecentBatches } from "@/components/recent-batches"
-import { SectionCards } from "@/components/section-cards"
+import { Link } from "react-router"
+import { ChartAreaInteractive } from "./chart-area-interactive"
+import { RecentBatches } from "./recent-batches"
+import { SectionCards } from "./section-cards"
 import { Button } from "@workspace/ui/components/button"
 
 export default function Page() {
@@ -33,7 +34,11 @@ export default function Page() {
               {t("page.overview.companyDescription")}
             </p>
           </div>
-          <Button variant="outline" render={<a href="#cong-ty" />}>
+          <Button
+            variant="outline"
+            nativeButton={false}
+            render={<Link to="/cong-ty" />}
+          >
             {t("page.overview.companyProfile")}
             <ArrowUpRightIcon className="size-4" />
           </Button>
@@ -42,7 +47,7 @@ export default function Page() {
         <ChartAreaInteractive />
         <RecentBatches />
         <p className="text-center text-xs text-muted-foreground">
-          DeepTrace · Nền tảng truy xuất nguồn gốc sản phẩm
+          {t("page.overview.footer")}
         </p>
       </main>
     </>

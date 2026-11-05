@@ -1,45 +1,64 @@
+import { lazy, Suspense } from "react"
 import { useTranslation } from "react-i18next"
-import {
-  GuidePage,
-  HelpPage,
-  SettingsPage,
-} from "./app/dashboard/support_pages"
-import DashboardPage from "./app/dashboard/page"
-import CompanyPage from "./app/dashboard/company_page"
-import ProductsPage from "./app/dashboard/products_page"
-import EmployeesPage from "./app/dashboard/employees_page"
-import { useCurrentPage } from "./hooks/use-current-page"
-import { DashboardLayout } from "./components/dashboard-layout"
+import { Link, Navigate, Route, Routes } from "react-router"
+import { DashboardLayout } from "./components/layout/dashboard-layout"
+
+const DashboardPage = lazy(() => import("./features/overview/page"))
+const CompanyPage = lazy(() => import("./features/company/page"))
+const ProductsPage = lazy(() => import("./features/products/page"))
+const EmployeesPage = lazy(() => import("./features/employees/page"))
+const GuidePage = lazy(() =>
+  import("./features/support/pages").then((module) => ({
+    default: module.GuidePage,
+  }))
+)
+const SettingsPage = lazy(() =>
+  import("./features/support/pages").then((module) => ({
+    default: module.SettingsPage,
+  }))
+)
+const HelpPage = lazy(() =>
+  import("./features/support/pages").then((module) => ({
+    default: module.HelpPage,
+  }))
+)
 
 export function App() {
   const { t } = useTranslation()
-  const page = useCurrentPage()
-  const content =
-    page === "#tong-quan" ? (
-      <DashboardPage />
-    ) : page === "#cong-ty" ? (
-      <CompanyPage />
-    ) : page === "#san-pham" ? (
-      <ProductsPage />
-    ) : page === "#nhan-vien" ? (
-      <EmployeesPage />
-    ) : page === "#huong-dan" ? (
-      <GuidePage />
-    ) : page === "#cai-dat" ? (
-      <SettingsPage />
-    ) : page === "#tro-giup" ? (
-      <HelpPage />
-    ) : (
-      <main className="p-8">
-        <h1 className="text-2xl font-semibold">{t("page.notFound")}</h1>
-        <a
-          href="#tong-quan"
-          className="mt-4 inline-block text-primary underline"
-        >
-          {t("page.backToOverview")}
-        </a>
-      </main>
-    )
-
-  return <DashboardLayout>{content}</DashboardLayout>
+  return (
+    <DashboardLayout>
+      <Suspense
+        fallback={
+          <main className="p-8" role="status">
+            {t("page.loading")}
+          </main>
+        }
+      >
+        <Routes>
+          <Route path="/" element={<Navigate to="/cong-ty" replace />} />
+          <Route path="/tong-quan" element={<DashboardPage />} />
+          <Route path="/cong-ty" element={<CompanyPage />} />
+          <Route path="/san-pham" element={<ProductsPage />} />
+          <Route path="/nhan-vien" element={<EmployeesPage />} />
+          <Route path="/huong-dan" element={<GuidePage />} />
+          <Route path="/cai-dat" element={<SettingsPage />} />
+          <Route path="/tro-giup" element={<HelpPage />} />
+          <Route
+            path="*"
+            element={
+              <main className="p-8">
+                <h1 className="text-2xl font-semibold">{t("page.notFound")}</h1>
+                <Link
+                  to="/tong-quan"
+                  className="mt-4 inline-block text-primary underline"
+                >
+                  {t("page.backToOverview")}
+                </Link>
+              </main>
+            }
+          />
+        </Routes>
+      </Suspense>
+    </DashboardLayout>
+  )
 }

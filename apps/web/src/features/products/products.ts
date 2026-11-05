@@ -14,13 +14,29 @@ const productsSchema = z.array(productSchema)
 
 export type Product = z.infer<typeof productSchema>
 
+export class ProductValidationError extends Error {
+  readonly path: string
+
+  constructor(path: string) {
+    super(`Invalid product JSON at ${path}`)
+    this.path = path
+  }
+}
+
+export class ProductRequestError extends Error {
+  readonly status: number
+
+  constructor(status: number) {
+    super(`Could not load products (HTTP ${status})`)
+    this.status = status
+  }
+}
+
 export function validateProducts(data: unknown): Product[] {
   const result = productsSchema.safeParse(data)
   if (!result.success) {
     const issue = result.error.issues[0]
-    throw new Error(
-      `JSON sản phẩm không hợp lệ tại ${issue.path.join(".")}: ${issue.message}`
-    )
+    throw new ProductValidationError(issue.path.join(".") || "root")
   }
   return result.data
 }
@@ -30,7 +46,7 @@ export async function getProducts(signal?: AbortSignal): Promise<Product[]> {
     signal,
   })
   if (!response.ok) {
-    throw new Error(`Không tải được sản phẩm (HTTP ${response.status}).`)
+    throw new ProductRequestError(response.status)
   }
 
   const data: unknown = await response.json()

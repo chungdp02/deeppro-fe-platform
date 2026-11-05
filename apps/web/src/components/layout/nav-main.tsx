@@ -1,5 +1,5 @@
 import { type ReactNode } from "react"
-import { useCurrentPage } from "@/hooks/use-current-page"
+import { NavLink, useLocation } from "react-router"
 
 import {
   SidebarGroup,
@@ -16,7 +16,7 @@ type NavItem = {
 }
 
 export function NavMain({ items }: { items: NavItem[] }) {
-  const activeUrl = useCurrentPage()
+  const { pathname } = useLocation()
 
   return (
     <SidebarGroup>
@@ -27,8 +27,8 @@ export function NavMain({ items }: { items: NavItem[] }) {
               <SidebarMenuButton
                 className="h-10 text-[15px] [&_svg]:size-[18px]"
                 tooltip={item.title}
-                isActive={activeUrl === item.url}
-                render={<a href={item.url} />}
+                isActive={pathname === item.url}
+                render={<NavLink to={item.url} />}
               >
                 {item.icon}
                 <span>{item.title}</span>

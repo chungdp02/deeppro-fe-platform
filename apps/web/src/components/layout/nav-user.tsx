@@ -24,6 +24,8 @@ import {
   Settings2Icon,
   CircleHelpIcon,
 } from "lucide-react"
+import { useNavigate } from "react-router"
+import { useTranslation } from "react-i18next"
 
 export function NavUser({
   user,
@@ -35,6 +37,8 @@ export function NavUser({
   }
 }) {
   const { isMobile } = useSidebar()
+  const { t } = useTranslation()
+  const navigate = useNavigate()
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -85,27 +89,27 @@ export function NavUser({
             <DropdownMenuGroup>
               <DropdownMenuItem
                 onClick={() => {
-                  window.location.hash = "#cong-ty"
+                  navigate("/cong-ty")
                 }}
               >
                 <CircleUserRoundIcon />
-                Hồ sơ doanh nghiệp
+                {t("page.overview.companyProfile")}
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => {
-                  window.location.hash = "#cai-dat"
+                  navigate("/cai-dat")
                 }}
               >
                 <Settings2Icon />
-                Cài đặt
+                {t("nav.settings")}
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => {
-                  window.location.hash = "#tro-giup"
+                  navigate("/tro-giup")
                 }}
               >
                 <CircleHelpIcon />
-                Trợ giúp
+                {t("nav.help")}
               </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>

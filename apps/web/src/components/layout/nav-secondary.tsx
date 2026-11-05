@@ -1,4 +1,4 @@
-import { useCurrentPage } from "@/hooks/use-current-page"
+import { NavLink, useLocation } from "react-router"
 
 import * as React from "react"
 
@@ -20,7 +20,7 @@ export function NavSecondary({
     icon: React.ReactNode
   }[]
 } & React.ComponentPropsWithoutRef<typeof SidebarGroup>) {
-  const page = useCurrentPage()
+  const { pathname } = useLocation()
   return (
     <SidebarGroup {...props}>
       <SidebarGroupContent>
@@ -29,9 +29,9 @@ export function NavSecondary({
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton
                 tooltip={item.title}
-                isActive={page === item.url}
+                isActive={pathname === item.url}
                 className="h-10 text-[15px] [&_svg]:size-[18px]"
-                render={<a href={item.url} />}
+                render={<NavLink to={item.url} />}
               >
                 {item.icon}
                 <span>{item.title}</span>

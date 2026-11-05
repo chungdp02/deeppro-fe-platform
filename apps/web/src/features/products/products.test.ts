@@ -21,7 +21,7 @@ describe("validateProducts", () => {
     const invalidProduct = { ...validProduct, group: "unknown" }
 
     expect(() => validateProducts([invalidProduct])).toThrow(
-      /JSON sản phẩm không hợp lệ tại 0\.group/
+      /Invalid product JSON at 0\.group/
     )
   })
 })

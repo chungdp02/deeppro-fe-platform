@@ -1,6 +1,6 @@
 import type { ReactNode } from "react"
-import { AppSidebar } from "@/components/app-sidebar"
-import { SiteHeader } from "@/components/site-header"
+import { AppSidebar } from "./app-sidebar"
+import { SiteHeader } from "./site-header"
 import { SidebarInset, SidebarProvider } from "@workspace/ui/components/sidebar"
 
 export function DashboardLayout({ children }: { children: ReactNode }) {

@@ -1,10 +1,11 @@
 import * as React from "react"
 import { useTranslation } from "react-i18next"
+import { Link } from "react-router"
 import deepTraceLogo from "@/assets/DeepTrace.png"
 
-import { NavMain } from "@/components/nav-main"
-import { NavSecondary } from "@/components/nav-secondary"
-import { NavUser } from "@/components/nav-user"
+import { NavMain } from "./nav-main"
+import { NavSecondary } from "./nav-secondary"
+import { NavUser } from "./nav-user"
 import {
   Sidebar,
   SidebarContent,
@@ -29,39 +30,39 @@ const data = {
   navMain: [
     {
       titleKey: "nav.overview",
-      url: "#tong-quan",
+      url: "/tong-quan",
       icon: <LayoutDashboardIcon />,
     },
     {
       titleKey: "nav.company",
-      url: "#cong-ty",
+      url: "/cong-ty",
       icon: <Building2Icon />,
     },
     {
       titleKey: "nav.products",
-      url: "#san-pham",
+      url: "/san-pham",
       icon: <PackageIcon />,
     },
     {
       titleKey: "nav.employees",
-      url: "#nhan-vien",
+      url: "/nhan-vien",
       icon: <UsersIcon />,
     },
     {
       titleKey: "nav.guide",
-      url: "#huong-dan",
+      url: "/huong-dan",
       icon: <BookOpenIcon />,
     },
   ],
   navSecondary: [
     {
       titleKey: "nav.settings",
-      url: "#cai-dat",
+      url: "/cai-dat",
       icon: <Settings2Icon />,
     },
     {
       titleKey: "nav.help",
-      url: "#tro-giup",
+      url: "/tro-giup",
       icon: <CircleHelpIcon />,
     },
   ],
@@ -71,8 +72,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader className="gap-0 p-0">
-        <a
-          href="#tong-quan"
+        <Link
+          to="/tong-quan"
           aria-label={`DeepTrace - ${t("nav.overview")}`}
           className="flex h-16 items-center border-b border-sidebar-border/20 px-4 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
         >
@@ -83,7 +84,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               className="absolute -top-3.5 -left-2.5 h-16 w-auto max-w-none brightness-0 invert"
             />
           </span>
-        </a>
+        </Link>
       </SidebarHeader>
       <SidebarContent>
         <NavMain

@@ -92,6 +92,16 @@ let sessionEmployees = initialEmployees
 
 export default function EmployeesPage() {
   const { t } = useTranslation()
+  const roleLabel = (value: string) =>
+    value === "Quản trị viên"
+      ? t("page.employees.roles.admin")
+      : value === "Quản lý"
+        ? t("page.employees.roles.manager")
+        : t("page.employees.roles.employee")
+  const statusLabel = (value: string) =>
+    value === "Hoạt động"
+      ? t("page.employees.statuses.active")
+      : t("page.employees.statuses.paused")
   const [employees, setEmployees] = useState(sessionEmployees)
   const [search, setSearch] = useState("")
   const [role, setRole] = useState("all")
@@ -134,11 +144,11 @@ export default function EmployeesPage() {
     const name = draft.name.trim()
     const email = draft.email.trim().toLowerCase()
     if (!name || !email) {
-      setError("Vui lòng nhập họ tên và email.")
+      setError("page.employees.required")
       return
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setError("Email không hợp lệ.")
+      setError("page.employees.invalidEmail")
       return
     }
     if (
@@ -146,7 +156,7 @@ export default function EmployeesPage() {
         (item) => item.email.toLowerCase() === email && item.id !== editing?.id
       )
     ) {
-      setError("Email này đã có trong danh sách nhân viên.")
+      setError("page.employees.duplicateEmail")
       return
     }
     const next = {
@@ -174,8 +184,8 @@ export default function EmployeesPage() {
     setOpen(false)
     setNotice(
       editing
-        ? "Đã cập nhật thông tin nhân viên."
-        : "Đã thêm nhân viên vào danh sách."
+        ? "page.employees.updated"
+        : "page.employees.added"
     )
   }
   return (
@@ -183,31 +193,31 @@ export default function EmployeesPage() {
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <p className="mb-2 text-xs font-medium tracking-wider text-primary">
-            QUẢN LÝ THÀNH VIÊN
+            {t("page.employees.eyebrow")}
           </p>
           <h1 className="text-3xl font-semibold">
             {t("page.employees.title")}
           </h1>
           <p className="mt-2 text-sm text-muted-foreground">
-            Quản lý thông tin, vai trò và trạng thái thành viên doanh nghiệp.
+            {t("page.employees.description")}
           </p>
         </div>
         <Button onClick={() => edit()}>
           <PlusIcon className="size-4" />
-          Thêm nhân viên
+          {t("page.employees.add")}
         </Button>
       </div>
       <div className="grid gap-4 sm:grid-cols-3">
         {[
-          { label: "Tổng nhân viên", value: employees.length, icon: UsersIcon },
+          { label: t("page.employees.total"), value: employees.length, icon: UsersIcon },
           {
-            label: "Đang hoạt động",
+            label: t("page.employees.activeCount"),
             value: employees.filter((item) => item.status === "Hoạt động")
               .length,
             icon: UserCheckIcon,
           },
           {
-            label: "Quản trị viên",
+            label: t("page.employees.adminCount"),
             value: employees.filter((item) => item.role === "Quản trị viên")
               .length,
             icon: ShieldCheckIcon,
@@ -233,7 +243,7 @@ export default function EmployeesPage() {
           role="status"
           className="rounded-lg border border-primary/20 bg-accent px-4 py-3 text-sm text-primary"
         >
-          {notice}
+          {t(notice)}
         </p>
       )}
       <Card>
@@ -242,8 +252,8 @@ export default function EmployeesPage() {
             <div className="relative min-w-48 flex-1">
               <SearchIcon className="pointer-events-none absolute top-1/2 left-3 z-10 size-4 -translate-y-1/2 text-muted-foreground" />
               <Input
-                aria-label="Tìm nhân viên"
-                placeholder="Tìm họ tên hoặc email..."
+                aria-label={t("page.employees.search")}
+                placeholder={t("page.employees.searchPlaceholder")}
                 className="pl-9"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -252,22 +262,22 @@ export default function EmployeesPage() {
             <Select
               value={role}
               items={[
-                { value: "all", label: "Tất cả vai trò" },
-                ...roles.map((value) => ({ value, label: value })),
+                { value: "all", label: t("page.employees.allRoles") },
+                ...roles.map((value) => ({ value, label: roleLabel(value) })),
               ]}
               onValueChange={(value) => setRole(value ?? "all")}
             >
               <SelectTrigger
-                aria-label="Lọc vai trò"
+                aria-label={t("page.employees.roleFilter")}
                 className="w-full sm:w-44"
               >
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Tất cả vai trò</SelectItem>
+                <SelectItem value="all">{t("page.employees.allRoles")}</SelectItem>
                 {roles.map((value) => (
                   <SelectItem key={value} value={value}>
-                    {value}
+                    {roleLabel(value)}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -275,22 +285,22 @@ export default function EmployeesPage() {
             <Select
               value={status}
               items={[
-                { value: "all", label: "Trạng thái" },
-                ...statuses.map((value) => ({ value, label: value })),
+                { value: "all", label: t("page.employees.status") },
+                ...statuses.map((value) => ({ value, label: statusLabel(value) })),
               ]}
               onValueChange={(value) => setStatus(value ?? "all")}
             >
               <SelectTrigger
-                aria-label="Lọc trạng thái"
+                aria-label={t("page.employees.statusFilter")}
                 className="w-full sm:w-44"
               >
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Trạng thái</SelectItem>
+                <SelectItem value="all">{t("page.employees.status")}</SelectItem>
                 {statuses.map((value) => (
                   <SelectItem key={value} value={value}>
-                    {value}
+                    {statusLabel(value)}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -304,7 +314,7 @@ export default function EmployeesPage() {
                   setStatus("all")
                 }}
               >
-                Xóa bộ lọc
+                {t("page.employees.clearFilters")}
               </Button>
             )}
           </div>
@@ -313,12 +323,12 @@ export default function EmployeesPage() {
               <TableHeader className="bg-muted/60">
                 <TableRow>
                   {[
-                    "Nhân viên",
-                    "Công ty",
-                    "Vai trò",
-                    "Trạng thái",
-                    "Ngày tạo",
-                    "Thao tác",
+                    t("page.employees.title"),
+                    t("page.employees.company"),
+                    t("page.employees.role"),
+                    t("page.employees.status"),
+                    t("page.employees.created"),
+                    t("page.employees.actions"),
                   ].map((title) => (
                     <TableHead className="px-4" key={title}>
                       {title}
@@ -353,7 +363,7 @@ export default function EmployeesPage() {
                       Công ty Cổ phần Thực phẩm ABZ
                     </TableCell>
                     <TableCell className="px-4">
-                      <Badge variant="outline">{item.role}</Badge>
+                      <Badge variant="outline">{roleLabel(item.role)}</Badge>
                     </TableCell>
                     <TableCell className="px-4">
                       <Badge
@@ -364,7 +374,7 @@ export default function EmployeesPage() {
                             : "text-muted-foreground"
                         }
                       >
-                        {item.status}
+                        {statusLabel(item.status)}
                       </Badge>
                     </TableCell>
                     <TableCell className="px-4">
@@ -375,7 +385,7 @@ export default function EmployeesPage() {
                         <Button
                           size="icon"
                           variant="ghost"
-                          aria-label={"Sửa " + item.name}
+                          aria-label={t("page.employees.editLabel", { name: item.name })}
                           onClick={() => edit(item)}
                         >
                           <PencilIcon className="size-4" />
@@ -384,7 +394,7 @@ export default function EmployeesPage() {
                           size="icon"
                           variant="ghost"
                           className="text-destructive"
-                          aria-label={"Xóa " + item.name}
+                          aria-label={t("page.employees.deleteLabel", { name: item.name })}
                           onClick={() => setDeleting(item)}
                         >
                           <Trash2Icon className="size-4" />
@@ -396,9 +406,9 @@ export default function EmployeesPage() {
                 {!rows.length && (
                   <TableRow>
                     <TableCell colSpan={6} className="h-36 text-center">
-                      <p className="font-medium">Không tìm thấy nhân viên</p>
+                      <p className="font-medium">{t("page.employees.empty")}</p>
                       <p className="mt-1 text-sm text-muted-foreground">
-                        Thử xóa bộ lọc hoặc thêm nhân viên mới.
+                        {t("page.employees.emptyHint")}
                       </p>
                     </TableCell>
                   </TableRow>
@@ -412,16 +422,15 @@ export default function EmployeesPage() {
         <DialogContent className="max-h-[90svh] overflow-y-auto sm:max-w-lg">
           <DialogHeader>
             <DialogTitle>
-              {editing ? "Sửa nhân viên" : "Thêm nhân viên"}
+              {t(editing ? "page.employees.edit" : "page.employees.add")}
             </DialogTitle>
             <DialogDescription>
-              Thông tin được lưu tạm trong phiên. Vai trò chỉ dùng cho giao diện
-              mẫu; chưa tạo tài khoản hoặc gửi email mời.
+              {t("page.employees.temporary")}
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={save} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="employee-name">Họ và tên *</Label>
+              <Label htmlFor="employee-name">{t("page.employees.name")} *</Label>
               <Input
                 id="employee-name"
                 required
@@ -445,15 +454,16 @@ export default function EmployeesPage() {
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
-                <Label>Vai trò</Label>
+                <Label>{t("page.employees.role")}</Label>
                 <Select
                   value={draft.role}
+                  items={roles.map((value) => ({ value, label: roleLabel(value) }))}
                   onValueChange={(value) =>
                     setDraft({ ...draft, role: value ?? draft.role })
                   }
                 >
                   <SelectTrigger
-                    aria-label="Vai trò nhân viên"
+                    aria-label={t("page.employees.employeeRole")}
                     className="w-full"
                   >
                     <SelectValue />
@@ -461,22 +471,23 @@ export default function EmployeesPage() {
                   <SelectContent>
                     {roles.map((value) => (
                       <SelectItem value={value} key={value}>
-                        {value}
+                        {roleLabel(value)}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label>Trạng thái</Label>
+                <Label>{t("page.employees.status")}</Label>
                 <Select
                   value={draft.status}
+                  items={statuses.map((value) => ({ value, label: statusLabel(value) }))}
                   onValueChange={(value) =>
                     setDraft({ ...draft, status: value ?? draft.status })
                   }
                 >
                   <SelectTrigger
-                    aria-label="Trạng thái nhân viên"
+                    aria-label={t("page.employees.employeeStatus")}
                     className="w-full"
                   >
                     <SelectValue />
@@ -484,7 +495,7 @@ export default function EmployeesPage() {
                   <SelectContent>
                     {statuses.map((value) => (
                       <SelectItem value={value} key={value}>
-                        {value}
+                        {statusLabel(value)}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -493,7 +504,7 @@ export default function EmployeesPage() {
             </div>
             {error && (
               <p role="alert" className="text-sm text-destructive">
-                {error}
+                {t(error)}
               </p>
             )}
             <div className="flex justify-end gap-2 border-t pt-4">
@@ -502,9 +513,9 @@ export default function EmployeesPage() {
                 variant="outline"
                 onClick={() => setOpen(false)}
               >
-                Hủy
+                {t("page.employees.cancel")}
               </Button>
-              <Button type="submit">Lưu thông tin</Button>
+              <Button type="submit">{t("page.employees.save")}</Button>
             </div>
           </form>
         </DialogContent>
@@ -517,26 +528,26 @@ export default function EmployeesPage() {
       >
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Xóa nhân viên?</DialogTitle>
+            <DialogTitle>{t("page.employees.deleteConfirm")}</DialogTitle>
             <DialogDescription>
-              Bạn muốn xóa “{deleting?.name}” khỏi danh sách nhân viên?
+              {t("page.employees.deleteQuestion", { name: deleting?.name })}
             </DialogDescription>
           </DialogHeader>
           <div className="flex justify-end gap-2">
             <Button variant="outline" onClick={() => setDeleting(null)}>
-              Hủy
+              {t("page.employees.cancel")}
             </Button>
             <Button
               variant="destructive"
               onClick={() => {
                 if (deleting) {
                   update(employees.filter((item) => item.id !== deleting.id))
-                  setNotice("Đã xóa nhân viên khỏi danh sách.")
+                  setNotice("page.employees.deleted")
                   setDeleting(null)
                 }
               }}
             >
-              Xóa nhân viên
+              {t("page.employees.delete")}
             </Button>
           </div>
         </DialogContent>

@@ -2,7 +2,13 @@ import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { getProducts, validateProducts, type Product } from "@/api/products"
+import {
+  getProducts,
+  validateProducts,
+  ProductRequestError,
+  ProductValidationError,
+  type Product,
+} from "./products"
 import {
   productFormSchema,
   type ProductFormValues,
@@ -52,6 +58,8 @@ const emptyProduct: ProductFormValues = {
   group: "main",
 }
 
+type LoadError = { key: string; details?: Record<string, string | number> }
+
 // Keep mock changes when navigating between pages during this session.
 let sessionProducts: Product[] | null = null
 
@@ -69,7 +77,7 @@ export default function ProductsPage() {
     getSessionProducts() ?? []
   )
   const [loading, setLoading] = useState(getSessionProducts() === null)
-  const [loadError, setLoadError] = useState("")
+  const [loadError, setLoadError] = useState<LoadError | null>(null)
   const [retry, setRetry] = useState(0)
   const [validationDemo, setValidationDemo] = useState("")
   const [search, setSearch] = useState("")
@@ -105,7 +113,11 @@ export default function ProductsPage() {
       .catch((cause: unknown) => {
         if (controller.signal.aborted) return
         setLoadError(
-          cause instanceof Error ? cause.message : "Không tải được sản phẩm."
+          cause instanceof ProductValidationError
+            ? { key: "page.products.invalidData", details: { path: cause.path } }
+            : cause instanceof ProductRequestError
+              ? { key: "page.products.loadFailedHttp", details: { status: cause.status } }
+              : { key: "page.products.loadFailed" }
         )
         setLoading(false)
       })
@@ -127,7 +139,7 @@ export default function ProductsPage() {
     setProducts(next)
   }
   function reloadProducts() {
-    setLoadError("")
+    setLoadError(null)
     setLoading(true)
     setValidationDemo("")
     setRetry((value) => value + 1)
@@ -287,7 +299,7 @@ export default function ProductsPage() {
             role="alert"
             className="flex items-center justify-between gap-4 rounded-lg border border-destructive/30 p-4 text-sm text-destructive"
           >
-            <span>{loadError}</span>
+            <span>{t(loadError.key, loadError.details)}</span>
             <Button variant="outline" onClick={reloadProducts}>
               {t("page.products.retry")}
             </Button>
