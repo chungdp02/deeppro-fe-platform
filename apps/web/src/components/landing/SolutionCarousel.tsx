@@ -1,52 +1,69 @@
-import { useState } from "react"
-import { Button } from "@workspace/ui/components/button"
+import { useTranslation } from "react-i18next"
 import { Card } from "@workspace/ui/components/card"
-const slides = [
-  {
-    image: "/images/official-medical.webp",
-    title: "Y tế & Dược phẩm",
-    text: "Đảm bảo an toàn thuốc và tuân thủ với việc theo dõi chuỗi cung ứng dược phẩm toàn diện.",
-  },
-  {
-    image: "/images/v10-food-greenhouse-960.webp",
-    title: "Thực phẩm & Nông nghiệp",
-    text: "Theo dõi sản phẩm thực phẩm từ trang trại đến người tiêu dùng với sự minh bạch hoàn toàn và đảm bảo an toàn.",
-  },
-  {
-    image: "/images/official-food.webp",
-    title: "Minh bạch tuyệt đối",
-    text: "Dữ liệu được lưu trữ trên blockchain không thể thay đổi, đảm bảo tính chính xác và minh bạch trong toàn bộ chuỗi cung ứng.",
-  },
-  {
-    image: "/images/v10-supply-chain-warehouse-960.webp",
-    title: "Quy trình linh hoạt",
-    text: "Quy trình truy xuất được thiết kế riêng cho từng đối tác, ngành hàng, mặt hàng.",
-  },
-  {
-    image: "/images/official-consumer.webp",
-    title: "Hàng tiêu dùng",
-    text: "Giám sát tính xác thực của sản phẩm và tính toàn vẹn của chuỗi cung ứng để bảo vệ người tiêu dùng.",
-  },
-]
+import { ArrowIcon } from "@/components/landing/ArrowIcon"
+
 export function SolutionCarousel() {
-  const [paused, setPaused] = useState(false)
+  const { t } = useTranslation()
+
+  const slides = [
+    {
+      image: "/images/official-consumer.webp",
+      title: t("solutions.slides.0.title", "Bảo vệ thương hiệu & Chống giả"),
+      text: t(
+        "solutions.slides.0.desc",
+        "Mã định danh duy nhất (UID) cho từng sản phẩm giúp ngăn chặn hàng giả, chống tràn hàng và kiểm soát hệ thống phân phối."
+      ),
+      linkHref: "#features",
+      linkLabel: t("solutions.slides.0.linkText", "Khám phá tính năng"),
+    },
+    {
+      image: "/images/v10-supply-chain-warehouse-960.webp",
+      title: t("solutions.slides.1.title", "Số hóa nhật ký & Vận hành chuỗi"),
+      text: t(
+        "solutions.slides.1.desc",
+        "Ghi nhận tức thời dữ liệu canh tác, sản xuất và lưu kho bằng ứng dụng di động, giảm thiểu sai sót và tối ưu thời gian bàn giao."
+      ),
+      linkHref: "#how-it-works",
+      linkLabel: t("solutions.slides.1.linkText", "Xem quy trình vận hành"),
+    },
+    {
+      image: "/images/official-food.webp",
+      title: t("solutions.slides.2.title", "Minh bạch hóa & Tạo dựng niềm tin"),
+      text: t(
+        "solutions.slides.2.desc",
+        "Dữ liệu chuỗi cung ứng được bảo chứng bằng công nghệ Blockchain, cung cấp thông tin xác thực và củng cố sự an tâm của khách hàng."
+      ),
+      linkHref: "#product",
+      linkLabel: t("solutions.slides.2.linkText", "Khám phá hộ chiếu số"),
+    },
+    {
+      image: "/images/v10-barcode-delivery-720.webp",
+      title: t("solutions.slides.3.title", "Kết nối khách hàng qua Zalo Mini App"),
+      text: t(
+        "solutions.slides.3.desc",
+        "Tra cứu nguồn gốc tức thì không cần cài ứng dụng mới, tiếp cận hàng chục triệu người dùng Việt Nam thuận tiện và nhanh chóng."
+      ),
+      linkHref: "#product",
+      linkLabel: t("solutions.slides.3.linkText", "Trải nghiệm tra cứu"),
+    },
+    {
+      image: "/images/official-medical.webp",
+      title: t("solutions.slides.4.title", "Chuẩn hóa dữ liệu GS1 & Xuất khẩu"),
+      text: t(
+        "solutions.slides.4.desc",
+        "Cấu trúc dữ liệu tương thích tiêu chuẩn quốc tế GS1, TCVN 12850 và sẵn sàng cho Hộ chiếu số DPP theo xu hướng toàn cầu."
+      ),
+      linkHref: "#features",
+      linkLabel: t("solutions.slides.4.linkText", "Xem chuẩn kỹ thuật"),
+    },
+  ]
+
   return (
     <div
       className="solution-carousel"
       role="region"
-      aria-label="Ứng dụng DeepTrace"
-      data-paused={paused}
+      aria-label={t("nav.solutions", "Ứng dụng DeepTrace")}
     >
-      <div className="solution-carousel__controls">
-        <p>Truy xuất nguồn gốc cho nhiều danh mục sản phẩm.</p>
-        <Button
-          variant="ghost"
-          onClick={() => setPaused(!paused)}
-          aria-pressed={paused}
-        >
-          {paused ? "Phát chuyển động" : "Tạm dừng chuyển động"}
-        </Button>
-      </div>
       <div className="solution-carousel__viewport">
         <div className="solution-carousel__track">
           {[0, 1].map((copy) => (
@@ -68,8 +85,8 @@ export function SolutionCarousel() {
                   <div>
                     <h3>{slide.title}</h3>
                     <p>{slide.text}</p>
-                    <a href="#industries">
-                      Khám phá ngành hàng <span aria-hidden="true">↗</span>
+                    <a href={slide.linkHref}>
+                      {slide.linkLabel} <ArrowIcon diagonal size={14} />
                     </a>
                   </div>
                 </Card>

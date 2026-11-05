@@ -1,16 +1,33 @@
+import { ArrowRight, ArrowUpRight } from "lucide-react"
+
 type ArrowIconProps = {
   diagonal?: boolean
+  className?: string
+  size?: number
 }
 
-export function ArrowIcon({ diagonal = false }: ArrowIconProps) {
+export function ArrowIcon({
+  diagonal = false,
+  className = "arrow-icon",
+  size = 16,
+}: ArrowIconProps) {
+  if (diagonal) {
+    return (
+      <ArrowUpRight
+        aria-hidden="true"
+        className={className ? `${className} arrow-icon--diagonal` : "arrow-icon--diagonal"}
+        size={size}
+        strokeWidth={2}
+      />
+    )
+  }
+
   return (
-    <svg
+    <ArrowRight
       aria-hidden="true"
-      className={diagonal ? "arrow-icon arrow-icon--diagonal" : "arrow-icon"}
-      viewBox="0 0 20 20"
-      fill="none"
-    >
-      <path d="M4 10h11M10 4l6 6-6 6" />
-    </svg>
+      className={className}
+      size={size}
+      strokeWidth={2}
+    />
   )
 }

@@ -1,4 +1,6 @@
 import type { ReactNode, RefObject } from "react"
+import { useTranslation } from "react-i18next"
+import { X } from "lucide-react"
 import { Button, buttonVariants } from "@workspace/ui/components/button"
 import {
   Sheet,
@@ -9,7 +11,6 @@ import {
 } from "@workspace/ui/components/sheet"
 import { ArrowIcon } from "@/components/landing/ArrowIcon"
 import {
-  landingNavigation,
   PHONE_LINK,
   PRODUCT_LOGIN_URL,
 } from "@/components/landing/navigation"
@@ -18,15 +19,28 @@ export type MobileNavigationSheetProps = {
   open: boolean
   onOpenChange: (open: boolean) => void
   finalFocus: RefObject<HTMLButtonElement | null>
-  themeControl: ReactNode
+  languageControl?: ReactNode
+  themeControl?: ReactNode
 }
 
 export function MobileNavigationSheet({
   open,
   onOpenChange,
   finalFocus,
-  themeControl,
+  languageControl,
 }: MobileNavigationSheetProps) {
+  const { t } = useTranslation()
+
+  const navItems = [
+    { href: "#about", label: t("nav.about", "Về chúng tôi") },
+    { href: "#solutions", label: t("nav.solutions", "Giải pháp") },
+    { href: "#how-it-works", label: t("nav.howItWorks", "Quy trình") },
+    { href: "#product", label: t("nav.product", "Hộ chiếu số") },
+    { href: "#features", label: t("nav.features", "Tính năng") },
+    { href: "#industries", label: t("nav.industries", "Lĩnh vực") },
+    { href: "#faq", label: t("nav.faq", "Hỏi đáp") },
+  ]
+
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
@@ -39,10 +53,10 @@ export function MobileNavigationSheet({
       >
         <div className="mobile-menu__topbar">
           <SheetTitle className="visually-hidden">
-            Điều hướng DeepTrace
+            {t("nav.mobileNavTitle", "Điều hướng DeepTrace")}
           </SheetTitle>
           <SheetDescription className="visually-hidden">
-            Các liên kết điều hướng và cài đặt giao diện trên di động.
+            {t("nav.mobileNavDesc", "Các liên kết điều hướng và cài đặt giao diện trên di động.")}
           </SheetDescription>
           <SheetClose
             render={
@@ -51,17 +65,18 @@ export function MobileNavigationSheet({
                 size="icon"
                 className="mobile-menu__close"
                 type="button"
-                aria-label="Đóng menu"
+                aria-label={t("nav.menuClose", "Đóng menu")}
               >
-                <span className="mobile-menu__close-icon" aria-hidden="true">
-                  ×
-                </span>
+                <X className="size-5" aria-hidden="true" />
               </Button>
             }
           />
         </div>
-        <nav className="mobile-menu__nav" aria-label="Điều hướng trên di động">
-          {landingNavigation.map((item) => (
+        <nav
+          className="mobile-menu__nav"
+          aria-label={t("nav.mobileNavTitle", "Điều hướng trên di động")}
+        >
+          {navItems.map((item) => (
             <a
               key={item.href}
               className="mobile-menu__link"
@@ -79,10 +94,10 @@ export function MobileNavigationSheet({
             rel="noreferrer"
             onClick={() => onOpenChange(false)}
           >
-            Đăng nhập DeepTrace
+            {t("nav.loginPlatform", "Đăng nhập DeepTrace")}
             <ArrowIcon diagonal />
           </a>
-          {themeControl}
+          {languageControl}
           <a
             className={buttonVariants({
               variant: "outline",
@@ -93,7 +108,7 @@ export function MobileNavigationSheet({
             href={PHONE_LINK}
             onClick={() => onOpenChange(false)}
           >
-            Nhận tư vấn
+            {t("nav.consultationShort", "Nhận tư vấn")}
             <ArrowIcon />
           </a>
         </nav>

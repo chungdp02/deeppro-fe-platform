@@ -1,91 +1,17 @@
 import { useEffect, useRef, useState, type ComponentType } from "react"
+import { useTranslation } from "react-i18next"
+import { Menu, X } from "lucide-react"
 import { Button, buttonVariants } from "@workspace/ui/components/button"
 import { ArrowIcon } from "@/components/landing/ArrowIcon"
 import {
-  landingNavigation,
   PHONE_LINK,
   PRODUCT_LOGIN_URL,
 } from "@/components/landing/navigation"
-import { useTheme } from "@/components/theme-provider"
-
+import { LanguageSwitcher } from "./LanguageSwitcher"
 import type { MobileNavigationSheetProps } from "@/components/landing/MobileNavigationSheet"
 
-function SunIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <circle cx="12" cy="12" r="4" />
-      <path d="M12 2v2" />
-      <path d="M12 20v2" />
-      <path d="m4.93 4.93 1.41 1.41" />
-      <path d="m17.66 17.66 1.41 1.41" />
-      <path d="M2 12h2" />
-      <path d="M20 12h2" />
-      <path d="m6.34 17.66-1.41 1.41" />
-      <path d="m19.07 4.93-1.41 1.41" />
-    </svg>
-  )
-}
-
-function MoonIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
-    </svg>
-  )
-}
-
-function ThemeToggle({ inMenu = false }: { inMenu?: boolean }) {
-  const { setTheme } = useTheme()
-
-  const toggleTheme = () => {
-    const currentTheme = document.documentElement.classList.contains("dark")
-      ? "dark"
-      : "light"
-    setTheme(currentTheme === "dark" ? "light" : "dark")
-  }
-
-  return (
-    <Button
-      variant="ghost"
-      size={inMenu ? "default" : "icon"}
-      className={inMenu ? "theme-toggle theme-toggle--menu" : "theme-toggle"}
-      type="button"
-      aria-label="Chuyển giữa giao diện sáng và tối"
-      title="Chuyển giữa giao diện sáng và tối"
-      onClick={toggleTheme}
-    >
-      <SunIcon className="theme-toggle__icon theme-toggle__icon--sun" />
-      <MoonIcon className="theme-toggle__icon theme-toggle__icon--moon" />
-      {inMenu ? (
-        <span>Giao diện</span>
-      ) : (
-        <span className="visually-hidden">
-          Chuyển giữa giao diện sáng và tối
-        </span>
-      )}
-    </Button>
-  )
-}
-
 export function Header() {
+  const { t } = useTranslation()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const [menuLoadState, setMenuLoadState] = useState<
@@ -95,6 +21,16 @@ export function Header() {
     useState<ComponentType<MobileNavigationSheetProps> | null>(null)
   const menuToggleRef = useRef<HTMLButtonElement>(null)
   const mobileSheetPromiseRef = useRef<Promise<void> | null>(null)
+
+  const navItems = [
+    { href: "#about", label: t("nav.about", "Về chúng tôi") },
+    { href: "#solutions", label: t("nav.solutions", "Giải pháp") },
+    { href: "#how-it-works", label: t("nav.howItWorks", "Quy trình") },
+    { href: "#product", label: t("nav.product", "Hộ chiếu số") },
+    { href: "#features", label: t("nav.features", "Tính năng") },
+    { href: "#industries", label: t("nav.industries", "Lĩnh vực") },
+    { href: "#faq", label: t("nav.faq", "Hỏi đáp") },
+  ]
 
   const loadMobileNavigation = () => {
     if (MobileNavigationSheet || mobileSheetPromiseRef.current) return
@@ -157,27 +93,28 @@ export function Header() {
         className={isScrolled ? "site-header is-scrolled" : "site-header"}
       >
         <div className="site-header__inner container">
-          <a className="brand" href="#top" aria-label="DeepTrace, về đầu trang">
-            <img
-              className="brand__logo brand__logo--light"
-              src="/images/deeptrace-logo-light-320.webp"
-              alt="DeepTrace"
-              width="320"
-              height="79"
-              loading="lazy"
-            />
+          <a
+            className="brand"
+            href="#top"
+            aria-label={t("nav.brandAria", "DeepTrace, về đầu trang")}
+          >
             <img
               className="brand__logo brand__logo--dark"
               src="/images/deeptrace-logo-white-320.webp"
               alt="DeepTrace"
               width="320"
               height="74"
-              loading="lazy"
+              loading="eager"
+              fetchPriority="high"
+              decoding="async"
             />
           </a>
 
-          <nav className="desktop-nav" aria-label="Điều hướng chính">
-            {landingNavigation.map((item) => (
+          <nav
+            className="desktop-nav"
+            aria-label={t("nav.mobileNavTitle", "Điều hướng chính")}
+          >
+            {navItems.map((item) => (
               <a className="desktop-nav__link" href={item.href} key={item.href}>
                 {item.label}
               </a>
@@ -194,7 +131,7 @@ export function Header() {
               target="_blank"
               rel="noreferrer"
             >
-              Đăng nhập
+              {t("nav.login", "Đăng nhập")}
               <ArrowIcon diagonal />
             </a>
             <a
@@ -205,10 +142,10 @@ export function Header() {
               })}
               href={PHONE_LINK}
             >
-              Đăng ký tư vấn
+              {t("nav.consultation", "Đăng ký tư vấn")}
               <ArrowIcon />
             </a>
-            <ThemeToggle />
+            <LanguageSwitcher />
           </div>
 
           <Button
@@ -220,11 +157,11 @@ export function Header() {
             aria-label={
               isMenuOpen
                 ? MobileNavigationSheet
-                  ? "Đóng menu"
-                  : "Hủy tải menu"
+                  ? t("nav.menuClose", "Đóng menu")
+                  : t("nav.menuCancel", "Hủy tải menu")
                 : menuLoadState === "error"
-                  ? "Thử tải menu lại"
-                  : "Mở menu"
+                  ? t("nav.menuRetry", "Thử tải menu lại")
+                  : t("nav.menuOpen", "Mở menu")
             }
             aria-expanded={isMenuOpen && Boolean(MobileNavigationSheet)}
             aria-controls={
@@ -236,8 +173,11 @@ export function Header() {
             }
             onClick={toggleMobileMenu}
           >
-            <span />
-            <span />
+            {isMenuOpen ? (
+              <X className="size-5" aria-hidden="true" />
+            ) : (
+              <Menu className="size-5" aria-hidden="true" />
+            )}
           </Button>
           <span
             id="mobile-menu-status"
@@ -258,7 +198,7 @@ export function Header() {
           open={isMenuOpen}
           onOpenChange={setIsMenuOpen}
           finalFocus={menuToggleRef}
-          themeControl={<ThemeToggle inMenu />}
+          languageControl={<LanguageSwitcher inMenu />}
         />
       )}
     </>

@@ -1,17 +1,24 @@
+import { useTranslation } from "react-i18next"
 import { buttonVariants } from "@workspace/ui/components/button"
 import { ArrowIcon } from "@/components/landing/ArrowIcon"
 import { PHONE_LINK, PRODUCT_LOGIN_URL } from "@/components/landing/navigation"
 import { Reveal } from "@/components/landing/Reveal"
 
 export function FinalCTASection() {
+  const { t } = useTranslation()
+
   return (
     <section className="final-cta" id="contact" aria-labelledby="contact-title">
       <div className="final-cta__layout container">
         <Reveal className="final-cta__copy">
-          <h2 id="contact-title">Bắt đầu truy xuất nguồn gốc.</h2>
+          <h2 id="contact-title">
+            {t("finalCta.heading", "Sẵn sàng số hóa hành trình sản phẩm của bạn?")}
+          </h2>
           <p>
-            Tham gia nền tảng DeepTrace để đảm bảo sản phẩm an toàn, minh bạch
-            từ nguồn gốc trang trại đến tận tay người tiêu dùng.
+            {t(
+              "finalCta.description",
+              "Kết nối cùng đội ngũ chuyên gia DeepTrace để xây dựng hệ thống truy xuất nguồn gốc minh bạch, đạt chuẩn quốc tế và nâng tầm giá trị thương hiệu."
+            )}
           </p>
           <div className="final-cta__actions">
             <a
@@ -24,7 +31,7 @@ export function FinalCTASection() {
               target="_blank"
               rel="noreferrer"
             >
-              Đăng nhập DeepTrace
+              {t("finalCta.primaryBtn", "Đăng nhập nền tảng")}
               <ArrowIcon diagonal />
             </a>
             <a
@@ -35,7 +42,7 @@ export function FinalCTASection() {
               })}
               href={PHONE_LINK}
             >
-              Nhận tư vấn
+              {t("finalCta.secondaryBtn", "Liên hệ tư vấn triển khai")}
               <ArrowIcon />
             </a>
           </div>

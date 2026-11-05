@@ -28,23 +28,12 @@
     <script>
       const root = document.documentElement
       root.classList.remove("no-js")
-
-      let savedTheme = null
+      root.classList.remove("dark")
+      root.classList.add("light")
       try {
-        savedTheme = localStorage.getItem("deeptrace-theme")
-      } catch {
-        savedTheme = null
-      }
-
-      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches
-      const initialTheme =
-        savedTheme === "light" || savedTheme === "dark"
-          ? savedTheme
-          : prefersDark
-            ? "dark"
-            : "light"
-      root.classList.remove("light", "dark")
-      root.classList.add(initialTheme)
+        const savedLang = localStorage.getItem("deeptrace-lang")
+        if (savedLang) root.lang = savedLang
+      } catch {}
     </script>
     <meta name="theme-color" content="#edeff4" />
     <meta

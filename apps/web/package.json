@@ -17,9 +17,16 @@
   },
   "dependencies": {
     "@workspace/ui": "workspace:*",
+    "@zxing/browser": "^0.2.1",
+    "@zxing/library": "^0.23.0",
+    "embla-carousel-autoplay": "^8.6.0",
+    "embla-carousel-react": "^8.6.0",
     "gsap": "^3.15.0",
+    "i18next": "^26.7.1",
+    "lucide-react": "^1.68.0",
     "react": "^19.3.0",
-    "react-dom": "^19.3.0"
+    "react-dom": "^19.3.0",
+    "react-i18next": "^17.1.12"
   },
   "devDependencies": {
     "@eslint/js": "^10",

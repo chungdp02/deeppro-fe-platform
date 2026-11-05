@@ -140,15 +140,26 @@ async function check(name, fn) {
       return { demoLabel: "Chuẩn VietGAP", qrGenerated: false }
     })
 
-    await check("Theme toggle changes the semantic theme", async () => {
+    await check("Language toggle switches bilingual content between Vietnamese and English", async () => {
       const root = page.locator("html")
-      const wasDark = await root.evaluate((element) => element.classList.contains("dark"))
-      await page.locator(".site-header .theme-toggle").click()
-      const isDark = await root.evaluate((element) => element.classList.contains("dark"))
-      assert.notEqual(isDark, wasDark)
-      const foreground = await page.locator("body").evaluate((element) => getComputedStyle(element).color)
-      assert.ok(foreground)
-      return { wasDark, isDark, foreground }
+      const switcher = page.locator(".site-header .language-switcher")
+      assert.equal(await root.getAttribute("lang"), "vi")
+
+      // Click chuyển sang tiếng Anh
+      await switcher.click()
+      await page.waitForTimeout(150)
+      assert.equal(await root.getAttribute("lang"), "en")
+      const h1TextEn = await page.locator("h1").innerText()
+      assert.ok(h1TextEn.includes("Transparent Traceability"), "Expected English hero headline")
+
+      // Click chuyển lại tiếng Việt
+      await switcher.click()
+      await page.waitForTimeout(150)
+      assert.equal(await root.getAttribute("lang"), "vi")
+      const h1TextVi = await page.locator("h1").innerText()
+      assert.ok(h1TextVi.includes("Truy xuất nguồn gốc"), "Expected Vietnamese hero headline")
+
+      return { switchedToEn: true, switchedBackToVi: true }
     })
 
     await check("Navigation links and contact destinations remain available", async () => {
@@ -224,43 +235,67 @@ async function check(name, fn) {
       return { originalClaimsPreserved: true }
     })
 
-    await check("Shared UI dark utilities follow the selected theme, independently of the OS", async () => {
-      const backgrounds = {}
+    await check("Page strictly enforces Light theme and never applies dark class", async () => {
       for (const os of ["light", "dark"]) {
-        for (const selected of ["light", "dark"]) {
-          const probePage = await browser.newPage({ colorScheme: os, reducedMotion: "reduce" })
-          try {
-            await probePage.addInitScript((theme) => localStorage.setItem("deeptrace-theme", theme), selected)
-            await probePage.goto(url, { waitUntil: "networkidle" })
-            const background = await probePage.evaluate((theme) => {
-              const probe = document.createElement("div")
-              // Use existing Button outline utility classes without app-specific CSS overrides.
-              probe.className = "bg-background dark:bg-input/30"
-              document.body.appendChild(probe)
-              const reference = document.createElement("div")
-              reference.style.backgroundColor = theme === "dark"
-                ? "color-mix(in oklab, var(--input) 30%, transparent)"
-                : "var(--background)"
-              document.body.appendChild(reference)
-              const result = {
-                actual: getComputedStyle(probe).backgroundColor,
-                expected: getComputedStyle(reference).backgroundColor,
-              }
-              probe.remove()
-              reference.remove()
-              return result
-            }, selected)
-            assert.equal(background.actual, background.expected, `${os}/${selected}: expected selected-theme utility`)
-            backgrounds[`${os}/${selected}`] = background.actual
-          } finally {
-            await probePage.close()
-          }
+        const probePage = await browser.newPage({ colorScheme: os, reducedMotion: "reduce" })
+        try {
+          await probePage.goto(url, { waitUntil: "networkidle" })
+          const rootClass = await probePage.locator("html").getAttribute("class")
+          assert.equal(rootClass.includes("dark"), false, `${os}: should not have dark class`)
+          assert.equal(rootClass.includes("light"), true, `${os}: should have light class`)
+        } finally {
+          await probePage.close()
         }
       }
-      assert.equal(backgrounds["light/light"], backgrounds["dark/light"])
-      assert.equal(backgrounds["light/dark"], backgrounds["dark/dark"])
-      assert.notEqual(backgrounds["light/light"], backgrounds["light/dark"])
-      return backgrounds
+      return { lightThemeLocked: true }
+    })
+
+    await check("Interactive Product Lookup switches products, shows empty state, and handles QR scanner dialog", async () => {
+      const demo = page.locator('[data-ui="product-passport"]')
+      const input = page.locator("#trace-code-input")
+      const submitBtn = page.locator(".product-lookup-form__submit")
+      const resetBtn = page.locator(".product-lookup-form__reset")
+      const scanBtn = page.locator(".product-lookup-form__scan")
+
+      // 1. Kiểm tra hiển thị mặc định của thẻ hộ chiếu
+      assert.ok((await demo.innerText()).includes("Chuẩn VietGAP"))
+      assert.ok((await demo.innerText()).includes("DeepTrace Passport"))
+
+      // 2. Click chip sản phẩm dược phẩm "PHARMA-2026-X1"
+      const pharmaChip = page.locator(".chip-button").filter({ hasText: "PHARMA-2026-X1" })
+      await pharmaChip.click()
+      await page.waitForTimeout(300)
+      assert.ok((await demo.innerText()).includes("Chuẩn GSP Y Tế"))
+      assert.ok((await demo.innerText()).includes("MediBio"))
+
+      // 3. Nhập mã không tồn tại -> kiểm tra empty state
+      await input.fill("UNKNOWN-999")
+      await submitBtn.click()
+      await page.waitForTimeout(300)
+      assert.ok((await demo.innerText()).includes("Không tìm thấy thông tin sản phẩm"))
+      assert.ok(await page.locator("#lookup-feedback").count() > 0)
+
+      // 4. Click nút reset để quay lại mặc định
+      await resetBtn.click()
+      await page.waitForTimeout(100)
+      assert.ok((await demo.innerText()).includes("Chuẩn VietGAP"))
+
+      // 5. Mở và đóng QR Scanner Dialog
+      await scanBtn.click()
+      const dialog = page.locator(".qr-scanner-dialog")
+      await dialog.waitFor({ state: "visible", timeout: 2000 })
+      assert.ok((await dialog.innerText()).includes("Quét mã QR truy xuất"))
+
+      // Nhấn Escape để đóng dialog
+      await page.keyboard.press("Escape")
+      await dialog.waitFor({ state: "hidden", timeout: 2000 })
+
+      return {
+        productSwitchPass: true,
+        emptyStatePass: true,
+        resetPass: true,
+        qrDialogPass: true,
+      }
     })
 
     await check("Browser reports no runtime or console errors", async () => {
