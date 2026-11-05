@@ -1,0 +1,137 @@
+name: DeepTrace Landing CI
+on:
+  push:
+    branches: [landing-page]
+  pull_request:
+    branches: [landing-page]
+  workflow_dispatch:
+    inputs:
+      performance:
+        description: Run six Lighthouse audits (report only)
+        type: boolean
+        default: false
+      preview:
+        description: Request configured Vercel Preview deployment
+        type: boolean
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: landing-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  quality:
+    name: Landing Quality
+    if: github.ref == 'refs/heads/landing-page' || github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup
+      - run: corepack pnpm typecheck
+      - run: corepack pnpm lint
+      - run: corepack pnpm --filter web build
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: landing-dist
+          path: apps/web/dist/
+          if-no-files-found: error
+          retention-days: 7
+  qa:
+    name: Landing QA (${{ matrix.suite }})
+    needs: quality
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [verify, visual]
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: landing-dist
+          path: apps/web/dist
+      - run: corepack pnpm --filter web exec playwright install --with-deps chromium
+      - run: node scripts/ci/run-qa.mjs
+        env:
+          QA_SUITE: ${{ matrix.suite }}
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: landing-${{ matrix.suite }}
+          path: tmp/ci/${{ matrix.suite }}/
+          retention-days: 7
+  performance:
+    name: Landing Performance
+    if: github.event_name == 'workflow_dispatch' && inputs.performance
+    needs: quality
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: landing-dist
+          path: apps/web/dist
+      - run: corepack pnpm --filter web exec playwright install --with-deps chromium
+      - run: node scripts/ci/run-qa.mjs
+        env:
+          QA_SUITE: perf
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: landing-performance
+          path: tmp/ci/perf/
+          retention-days: 7
+  preview:
+    name: Landing Preview
+    needs: [quality, qa, performance]
+    if: >-
+      always() && !cancelled() &&
+      github.ref == 'refs/heads/landing-page' &&
+      github.event_name != 'pull_request' &&
+      vars.ENABLE_DEEPTRACE_VERCEL_PREVIEW == 'true' &&
+      (github.event_name == 'push' || inputs.preview) &&
+      needs.quality.result == 'success' && needs.qa.result == 'success' &&
+      (needs.performance.result == 'success' || needs.performance.result == 'skipped')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    environment: preview
+    env:
+      VERCEL_ORG_ID: ${{ vars.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ vars.VERCEL_PROJECT_ID }}
+      VERCEL_CLI_VERSION: ${{ vars.VERCEL_CLI_VERSION }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup
+      - name: Validate deployment configuration
+        shell: bash
+        run: |
+          test -n "$VERCEL_ORG_ID"
+          test -n "$VERCEL_PROJECT_ID"
+          [[ "$VERCEL_CLI_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
+      - name: Build and deploy Preview
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        shell: bash
+        run: |
+          test -n "$VERCEL_TOKEN"
+          corepack pnpm dlx "vercel@$VERCEL_CLI_VERSION" pull --yes --environment=preview
+          corepack pnpm dlx "vercel@$VERCEL_CLI_VERSION" build
+          corepack pnpm dlx "vercel@$VERCEL_CLI_VERSION" deploy --prebuilt --yes > "$RUNNER_TEMP/preview-url.txt"
+      - run: corepack pnpm --filter web exec playwright install --with-deps chromium
+      - name: Verify Preview
+        run: node scripts/ci/smoke-preview.mjs
+        env:
+          PREVIEW_URL_FILE: ${{ runner.temp }}/preview-url.txt

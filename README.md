@@ -4,7 +4,7 @@ Monorepo này chứa landing page DeepTrace và thư viện giao diện dùng ch
 
 ## Yêu cầu
 
-- Node.js `>=20.19.0` (phiên bản đã khai báo trong `package.json`).
+- Node.js `>=22.13.0` (pnpm 11 yêu cầu Node 22.13 trở lên; CI dùng 22.16.0).
 - Corepack và pnpm `11.25.0` (phiên bản đã khai báo trong `package.json`).
 
 ## Cài đặt và chạy landing page
@@ -82,3 +82,9 @@ cần; lần chạy đầu cần kết nối mạng và Chrome/Chromium phù h�
 file environment cục bộ có thông tin xác thực.
 
 Báo cáo cấu trúc hiện tại và phạm vi dùng shadcn: [architecture review](docs/deeptrace-project-architecture-review.md).
+
+## CI/CD nhánh landing-page
+
+- [Kiến trúc pipeline](docs/deeptrace-cicd-architecture.md)
+- [Thiết lập Actions và Vercel Preview](docs/deeptrace-cicd-setup.md)
+- [Kết quả xác minh và giới hạn](docs/deeptrace-cicd-verification-report.md)

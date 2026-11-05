@@ -8,6 +8,7 @@ yarn-error.log*
 lerna-debug.log*
 
 node_modules
+/.vercel/
 dist
 dist-ssr
 *.local
